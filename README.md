@@ -24,7 +24,7 @@ Or you can download whole respository with one of following ways:
 
 * Clone this repository with `git clone https://github.com/BioinfoDriver/CancerNeuro.git`
 
-* Download whole respository by clicking `Download` button at top right of url page https://github.com/BioinfoDriver/AUGUR
+* Download whole respository by clicking `Download` button at top right of url page https://github.com/BioinfoDriver/CancerNeuro
 
 ## Reproduce analysis
 
