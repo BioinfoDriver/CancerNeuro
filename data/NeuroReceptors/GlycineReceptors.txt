@@ -1,0 +1,6 @@
+HGNC ID	Approved symbol	Approved name	Status	Locus type	Previous symbols	Alias symbols	Chromosome	NCBI Gene ID	Ensembl gene ID	Vega gene ID	Group ID	Group name
+HGNC:4326	GLRA1	glycine receptor alpha 1	Approved	gene with protein product	STHE		5q33.1	2741	ENSG00000145888	OTTHUMG00000130121	868	Glycine receptors
+HGNC:4327	GLRA2	glycine receptor alpha 2	Approved	gene with protein product	GLR		Xp22.2	2742	ENSG00000101958	OTTHUMG00000021166	868	Glycine receptors
+HGNC:4328	GLRA3	glycine receptor alpha 3	Approved	gene with protein product			4q34.1	8001	ENSG00000145451	OTTHUMG00000149816	868	Glycine receptors
+HGNC:31715	GLRA4	glycine receptor alpha 4 (pseudogene)	Approved	pseudogene			Xq22.2	441509	ENSG00000188828	OTTHUMG00000022110	868	Glycine receptors
+HGNC:4329	GLRB	glycine receptor beta	Approved	gene with protein product			4q32.1	2743	ENSG00000109738	OTTHUMG00000161954	868	Glycine receptors

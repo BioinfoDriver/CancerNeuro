@@ -1,0 +1,22 @@
+HGNC ID	Approved symbol	Approved name	Status	Locus type	Previous symbols	Alias symbols	Chromosome	NCBI Gene ID	Ensembl gene ID	Vega gene ID	Group ID	Group name
+HGNC:1950	CHRM1	cholinergic receptor muscarinic 1	Approved	gene with protein product			11q12.3	1128	ENSG00000168539	OTTHUMG00000167765	180	Cholinergic receptors muscarinic
+HGNC:1951	CHRM2	cholinergic receptor muscarinic 2	Approved	gene with protein product			7q33	1129	ENSG00000181072	OTTHUMG00000155658	180	Cholinergic receptors muscarinic
+HGNC:1952	CHRM3	cholinergic receptor muscarinic 3	Approved	gene with protein product		m3AChR	1q43	1131	ENSG00000133019	OTTHUMG00000039649	180	Cholinergic receptors muscarinic
+HGNC:1953	CHRM4	cholinergic receptor muscarinic 4	Approved	gene with protein product			11p11.2	1132	ENSG00000180720	OTTHUMG00000154371	180	Cholinergic receptors muscarinic
+HGNC:1954	CHRM5	cholinergic receptor muscarinic 5	Approved	gene with protein product			15q14	1133	ENSG00000184984	OTTHUMG00000129369	180	Cholinergic receptors muscarinic
+HGNC:1955	CHRNA1	cholinergic receptor nicotinic alpha 1 subunit	Approved	gene with protein product	CHRNA		2q31.1	1134	ENSG00000138435	OTTHUMG00000132357	173	Cholinergic receptors nicotinic subunits
+HGNC:13800	CHRNA10	cholinergic receptor nicotinic alpha 10 subunit	Approved	gene with protein product			11p15.4	57053	ENSG00000129749	OTTHUMG00000011844	173	Cholinergic receptors nicotinic subunits
+HGNC:1956	CHRNA2	cholinergic receptor nicotinic alpha 2 subunit	Approved	gene with protein product			8p21.2	1135	ENSG00000120903	OTTHUMG00000102083	173	Cholinergic receptors nicotinic subunits
+HGNC:1957	CHRNA3	cholinergic receptor nicotinic alpha 3 subunit	Approved	gene with protein product			15q25.1	1136	ENSG00000080644	OTTHUMG00000143863	173	Cholinergic receptors nicotinic subunits
+HGNC:1958	CHRNA4	cholinergic receptor nicotinic alpha 4 subunit	Approved	gene with protein product	EBN, EBN1	BFNC	20q13.33	1137	ENSG00000101204	OTTHUMG00000033080	173	Cholinergic receptors nicotinic subunits
+HGNC:1959	CHRNA5	cholinergic receptor nicotinic alpha 5 subunit	Approved	gene with protein product			15q25.1	1138	ENSG00000169684	OTTHUMG00000143858	173	Cholinergic receptors nicotinic subunits
+HGNC:15963	CHRNA6	cholinergic receptor nicotinic alpha 6 subunit	Approved	gene with protein product			8p11.21	8973	ENSG00000147434	OTTHUMG00000165275	173	Cholinergic receptors nicotinic subunits
+HGNC:1960	CHRNA7	cholinergic receptor nicotinic alpha 7 subunit	Approved	gene with protein product			15q13.3	1139	ENSG00000175344	OTTHUMG00000129285	173	Cholinergic receptors nicotinic subunits
+HGNC:14079	CHRNA9	cholinergic receptor nicotinic alpha 9 subunit	Approved	gene with protein product		NACHRA9	4p14	55584	ENSG00000174343	OTTHUMG00000099375	173	Cholinergic receptors nicotinic subunits
+HGNC:1961	CHRNB1	cholinergic receptor nicotinic beta 1 subunit	Approved	gene with protein product	CHRNB		17p13.1	1140	ENSG00000170175	OTTHUMG00000108139	173	Cholinergic receptors nicotinic subunits
+HGNC:1962	CHRNB2	cholinergic receptor nicotinic beta 2 subunit	Approved	gene with protein product			1q21.3	1141	ENSG00000160716	OTTHUMG00000037262	173	Cholinergic receptors nicotinic subunits
+HGNC:1963	CHRNB3	cholinergic receptor nicotinic beta 3 subunit	Approved	gene with protein product			8p11.21	1142	ENSG00000147432	OTTHUMG00000165262	173	Cholinergic receptors nicotinic subunits
+HGNC:1964	CHRNB4	cholinergic receptor nicotinic beta 4 subunit	Approved	gene with protein product			15q25.1	1143	ENSG00000117971	OTTHUMG00000143860	173	Cholinergic receptors nicotinic subunits
+HGNC:1965	CHRND	cholinergic receptor nicotinic delta subunit	Approved	gene with protein product	ACHRD		2q37.1	1144	ENSG00000135902	OTTHUMG00000133261	173	Cholinergic receptors nicotinic subunits
+HGNC:1966	CHRNE	cholinergic receptor nicotinic epsilon subunit	Approved	gene with protein product		ACHRE	17p13.2	1145	ENSG00000108556	OTTHUMG00000090778	173	Cholinergic receptors nicotinic subunits
+HGNC:1967	CHRNG	cholinergic receptor nicotinic gamma subunit	Approved	gene with protein product	ACHRG		2q37.1	1146	ENSG00000196811	OTTHUMG00000153327	173	Cholinergic receptors nicotinic subunits

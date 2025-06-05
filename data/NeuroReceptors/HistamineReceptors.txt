@@ -1,0 +1,5 @@
+HGNC ID	Approved symbol	Approved name	Status	Locus type	Previous symbols	Alias symbols	Chromosome	NCBI Gene ID	Ensembl gene ID	Vega gene ID	Group ID	Group name
+HGNC:5182	HRH1	histamine receptor H1	Approved	gene with protein product			3p25.3	3269	ENSG00000196639	OTTHUMG00000129719	187	Histamine receptors
+HGNC:5183	HRH2	histamine receptor H2	Approved	gene with protein product			5q35.2	3274	ENSG00000113749	OTTHUMG00000130660	187	Histamine receptors
+HGNC:5184	HRH3	histamine receptor H3	Approved	gene with protein product		GPCR97	20q13.33	11255	ENSG00000101180	OTTHUMG00000032899	187	Histamine receptors
+HGNC:17383	HRH4	histamine receptor H4	Approved	gene with protein product		H4R, HH4R, AXOR35, GPCR105, GPRv53	18q11.2	59340	ENSG00000134489	OTTHUMG00000131945	187	Histamine receptors

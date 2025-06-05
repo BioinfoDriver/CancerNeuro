@@ -1,0 +1,19 @@
+HGNC ID	Approved symbol	Approved name	Status	Locus type	Previous symbols	Alias symbols	Chromosome	NCBI Gene ID	Ensembl gene ID	Vega gene ID	Group ID	Group name
+HGNC:5286	HTR1A	5-hydroxytryptamine receptor 1A	Approved	gene with protein product	ADRB2RL1, ADRBRL1	5-HT1A	5q12.3	3350	ENSG00000178394	OTTHUMG00000162279	170	5-hydroxytryptamine receptors, G protein-coupled
+HGNC:5287	HTR1B	5-hydroxytryptamine receptor 1B	Approved	gene with protein product		S12, 5-HT1B, HTR1D2, 5-HT1DB	6q14.1	3351	ENSG00000135312	OTTHUMG00000015066	170	5-hydroxytryptamine receptors, G protein-coupled
+HGNC:5289	HTR1D	5-hydroxytryptamine receptor 1D	Approved	gene with protein product	HTRL	RDC4, HT1DA, 5-HT1D	1p36.12	3352	ENSG00000179546	OTTHUMG00000003235	170	5-hydroxytryptamine receptors, G protein-coupled
+HGNC:5291	HTR1E	5-hydroxytryptamine receptor 1E	Approved	gene with protein product		5-HT1E	6q14.3	3354	ENSG00000168830	OTTHUMG00000015154	170	5-hydroxytryptamine receptors, G protein-coupled
+HGNC:5292	HTR1F	5-hydroxytryptamine receptor 1F	Approved	gene with protein product		HTR1EL, 5-HT1F	3p12	3355	ENSG00000179097	OTTHUMG00000159008	170	5-hydroxytryptamine receptors, G protein-coupled
+HGNC:5293	HTR2A	5-hydroxytryptamine receptor 2A	Approved	gene with protein product	HTR2	5-HT2A	13q14.2	3356	ENSG00000102468	OTTHUMG00000016881	170	5-hydroxytryptamine receptors, G protein-coupled
+HGNC:5294	HTR2B	5-hydroxytryptamine receptor 2B	Approved	gene with protein product		5-HT(2B), 5-HT2B	2q37.1	3357	ENSG00000135914	OTTHUMG00000133222	170	5-hydroxytryptamine receptors, G protein-coupled
+HGNC:5295	HTR2C	5-hydroxytryptamine receptor 2C	Approved	gene with protein product	HTR1C	5-HT2C, 5HTR2C	Xq23	3358	ENSG00000147246	OTTHUMG00000022226	170	5-hydroxytryptamine receptors, G protein-coupled
+HGNC:5299	HTR4	5-hydroxytryptamine receptor 4	Approved	gene with protein product		5-HT4	5q32	3360	ENSG00000164270	OTTHUMG00000129931	170	5-hydroxytryptamine receptors, G protein-coupled
+HGNC:5300	HTR5A	5-hydroxytryptamine receptor 5A	Approved	gene with protein product		5-HT5A	7q36.2	3361	ENSG00000157219	OTTHUMG00000151327	170	5-hydroxytryptamine receptors, G protein-coupled
+HGNC:16291	HTR5BP	5-hydroxytryptamine receptor 5B, pseudogene	Approved	pseudogene	GPR134, HTR5B	5-HT5B	2q14.1	645694	ENSG00000125631	OTTHUMG00000058516	170	5-hydroxytryptamine receptors, G protein-coupled
+HGNC:5301	HTR6	5-hydroxytryptamine receptor 6	Approved	gene with protein product		5-HT6, 5-HT6R	1p36.13	3362	ENSG00000158748	OTTHUMG00000002713	170	5-hydroxytryptamine receptors, G protein-coupled
+HGNC:5302	HTR7	5-hydroxytryptamine receptor 7	Approved	gene with protein product		5-HT7	10q23.31	3363	ENSG00000148680	OTTHUMG00000018732	170	5-hydroxytryptamine receptors, G protein-coupled
+HGNC:5297	HTR3A	5-hydroxytryptamine receptor 3A	Approved	gene with protein product	HTR3	5-HT3R, 5-HT3A	11q23.2	3359	ENSG00000166736	OTTHUMG00000160494	172	5-hydroxytryptamine receptors, ionotropic 
+HGNC:5298	HTR3B	5-hydroxytryptamine receptor 3B	Approved	gene with protein product		5-HT3B	11q23.2	9177	ENSG00000149305	OTTHUMG00000168210	172	5-hydroxytryptamine receptors, ionotropic 
+HGNC:24003	HTR3C	5-hydroxytryptamine receptor 3C	Approved	gene with protein product			3q27.1	170572	ENSG00000178084	OTTHUMG00000156862	172	5-hydroxytryptamine receptors, ionotropic 
+HGNC:24004	HTR3D	5-hydroxytryptamine receptor 3D	Approved	gene with protein product			3q27.1	200909	ENSG00000186090	OTTHUMG00000156858	172	5-hydroxytryptamine receptors, ionotropic 
+HGNC:24005	HTR3E	5-hydroxytryptamine receptor 3E	Approved	gene with protein product			3q27.1	285242	ENSG00000186038	OTTHUMG00000156857	172	5-hydroxytryptamine receptors, ionotropic 

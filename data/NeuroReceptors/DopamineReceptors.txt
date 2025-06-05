@@ -1,0 +1,6 @@
+HGNC ID	Approved symbol	Approved name	Status	Locus type	Previous symbols	Alias symbols	Chromosome	NCBI Gene ID	Ensembl gene ID	Vega gene ID	Group ID	Group name
+HGNC:3020	DRD1	dopamine receptor D1	Approved	gene with protein product		D1R	5q35.2	1812	ENSG00000184845	OTTHUMG00000130557	181	Dopamine receptors
+HGNC:3023	DRD2	dopamine receptor D2	Approved	gene with protein product		D2R	11q23.2	1813	ENSG00000149295	OTTHUMG00000167717	181	Dopamine receptors
+HGNC:3024	DRD3	dopamine receptor D3	Approved	gene with protein product			3q13.31	1814	ENSG00000151577	OTTHUMG00000159334	181	Dopamine receptors
+HGNC:3025	DRD4	dopamine receptor D4	Approved	gene with protein product			11p15.5	1815	ENSG00000069696	OTTHUMG00000133312	181	Dopamine receptors
+HGNC:3026	DRD5	dopamine receptor D5	Approved	gene with protein product	DRD1L2	DRD1B	4p16.1	1816	ENSG00000169676	OTTHUMG00000128489	181	Dopamine receptors

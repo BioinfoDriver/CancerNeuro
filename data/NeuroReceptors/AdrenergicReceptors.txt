@@ -1,0 +1,10 @@
+HGNC ID	Approved symbol	Approved name	Status	Locus type	Previous symbols	Alias symbols	Chromosome	NCBI Gene ID	Ensembl gene ID	Vega gene ID	Group ID	Group name
+HGNC:277	ADRA1A	adrenoceptor alpha 1A	Approved	gene with protein product	ADRA1C	ADRA1L1	8p21.2	148	ENSG00000120907	OTTHUMG00000099459	169	Adrenoceptors
+HGNC:278	ADRA1B	adrenoceptor alpha 1B	Approved	gene with protein product			5q33.3	147	ENSG00000170214	OTTHUMG00000130327	169	Adrenoceptors
+HGNC:280	ADRA1D	adrenoceptor alpha 1D	Approved	gene with protein product		ADRA1R, ADRA1A, ADRA1	20p13	146	ENSG00000171873	OTTHUMG00000031779	169	Adrenoceptors
+HGNC:281	ADRA2A	adrenoceptor alpha 2A	Approved	gene with protein product	ADRA2, ADRA2R	ADRAR	10q25.2	150	ENSG00000150594	OTTHUMG00000019050	169	Adrenoceptors
+HGNC:282	ADRA2B	adrenoceptor alpha 2B	Approved	gene with protein product	ADRA2L1, ADRA2RL1	ADRARL1	2q11.2	151	ENSG00000274286	OTTHUMG00000188276	169	Adrenoceptors
+HGNC:283	ADRA2C	adrenoceptor alpha 2C	Approved	gene with protein product	ADRA2L2, ADRA2RL2	ADRARL2	4p16.3	152	ENSG00000184160	OTTHUMG00000159830	169	Adrenoceptors
+HGNC:285	ADRB1	adrenoceptor beta 1	Approved	gene with protein product	ADRB1R		10q25.3	153	ENSG00000043591	OTTHUMG00000019079	169	Adrenoceptors
+HGNC:286	ADRB2	adrenoceptor beta 2	Approved	gene with protein product	ADRB2R	ADRBR, BAR, B2AR, ARB2	5q32	154	ENSG00000169252	OTTHUMG00000129933	169	Adrenoceptors
+HGNC:288	ADRB3	adrenoceptor beta 3	Approved	gene with protein product			8p11.23	155	ENSG00000188778	OTTHUMG00000164028	169	Adrenoceptors

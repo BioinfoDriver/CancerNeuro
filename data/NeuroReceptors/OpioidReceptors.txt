@@ -1,0 +1,5 @@
+HGNC ID	Approved symbol	Approved name	Status	Locus type	Previous symbols	Alias symbols	Chromosome	NCBI Gene ID	Ensembl gene ID	Vega gene ID	Group ID	Group name
+HGNC:8153	OPRD1	opioid receptor delta 1	Approved	gene with protein product			1p35.3	4985	ENSG00000116329	OTTHUMG00000003646	245	Opioid receptors
+HGNC:8154	OPRK1	opioid receptor kappa 1	Approved	gene with protein product		KOR, OPRK	8q11.23	4986	ENSG00000082556	OTTHUMG00000164276	245	Opioid receptors
+HGNC:8155	OPRL1	opioid related nociceptin receptor 1	Approved	gene with protein product		NOCIR, ORL1, OOR, KOR-3, NOPr, PNOCR	20q13.33	4987	ENSG00000125510	OTTHUMG00000033027	245	Opioid receptors
+HGNC:8156	OPRM1	opioid receptor mu 1	Approved	gene with protein product		MOR1, MOP	6q25.2	4988	ENSG00000112038	OTTHUMG00000015870	245	Opioid receptors
