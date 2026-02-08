@@ -17,31 +17,31 @@ Cancer neuroscience highlights the critical role of neural signaling in tumor bi
 
 ## Instructions for Core Analytical Procedures
 ### Annotating Genomic Point Mutations and Short Indels
-Requirements
-Java: Version 1.8 
-GATK4: 4.6.2.0
+* Requirements
+   - Java: Version 1.8 
+   - GATK4: 4.6.2.0
 
-Execution Command
-./gatk Funcotator \
-    --variant variants.vcf \
-    --reference Homo_sapiens_assembly19.fasta \
-    --ref-version hg19 \
-    --data-sources-path funcotator_dataSources.v1.8.hg19.20230908s\
-    --output variants.funcotated.maf \
-    --output-file-format MAF
-    --ignore-filtered-variants false \
---transcript-selection-mode CANONICAL
+* Execution Command
+   -     ./gatk Funcotator \
+   -     --variant variants.vcf \
+   -     --reference Homo_sapiens_assembly19.fasta \
+   -     --ref-version hg19 \
+   -     --data-sources-path funcotator_dataSources.v1.8.hg19.20230908s\
+   -     --output variants.funcotated.maf \
+   -     --output-file-format MAF
+   -     --ignore-filtered-variants false \
+   -     --transcript-selection-mode CANONICAL
 
-Parameter Description
---variant: Path to the input VCF file containing variants to be annotated.
---reference: Path to the reference sequence (FASTA format) used for alignment.
---ref-version: Human reference genome version (e.g. hg19, hg38, etc.).
---data-sources-path: Path to the Funcotator data sources directory. Data can be downloaded from [Broad Institute Google Cloud] ([https://console.cloud.google.com/storage/browser/broad-public-datasets/funcotator).
---output: Output file path for annotated variants.
---output-file-format: Output format: VCF, MAF, or SEG.
---ignore-filtered-variants: Ignore/drop variants that have been filtered in the input. These variants will not appear in the output file.
---transcript-selection-mode: Method of detailed transcript selection. This will select the transcript for detailed annotation (CANONICAL, ALL, or BEST_EFFECT).
-For detailed usage and tutorials, please refer to the official GATK documentation:
+* Parameter Description
+   ---variant: Path to the input VCF file containing variants to be annotated.
+   ---reference: Path to the reference sequence (FASTA format) used for alignment.
+   ---ref-version: Human reference genome version (e.g. hg19, hg38, etc.).
+   ---data-sources-path: Path to the Funcotator data sources directory. Data can be downloaded from [Broad Institute Google Cloud] ([https://console.cloud.google.com/storage/browser/broad-public-datasets/funcotator).
+   ---output: Output file path for annotated variants.
+   ---output-file-format: Output format: VCF, MAF, or SEG.
+   ---ignore-filtered-variants: Ignore/drop variants that have been filtered in the input. These variants will not appear in the output file.
+   ---transcript-selection-mode: Method of detailed transcript selection. This will select the transcript for detailed annotation (CANONICAL, ALL, or BEST_EFFECT).
+   -For detailed usage and tutorials, please refer to the official GATK documentation:
 [Funcotator Information and Tutorial](
 https://gatk.broadinstitute.org/hc/en-us/articles/360035889931-Funcotator-Information-and-Tutorial).
 
