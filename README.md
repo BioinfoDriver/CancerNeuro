@@ -11,7 +11,7 @@ Cancer neuroscience highlights the critical role of neural signaling in tumor bi
   - EpigeneticRegulation — corresponds to Section 4
   - NeuroregulatorySubtypes — corresponds to Section 5
   - Subtype4LggSubtype & Subtype1LihcSubtype — correspond to Section 6
-  - Each subdirectory includes scripts to reproduce the analyses and figures presented in the respective section.
+ - Each subdirectory includes scripts to reproduce the analyses and figures presented in the respective section.
 * [data](https://github.com/BioinfoDriver/CancerNeuro/tree/main/data): This directory stores the original and preprocessed data used in the analyses. Due to file size limitations, some datasets are provided via external download links. If you require access to data not directly available here, please contact the lead author Yajing Zhang (zhangyajing@hrbmu.edu.cn) with a reasonable request.
 * [result](https://github.com/BioinfoDriver/CancerNeuro/tree/main/result): This directory contains key intermediate and final outputs from the analyses, including processed tables, statistical summaries, and visualization-ready files that support the findings presented in the manuscript.
 
