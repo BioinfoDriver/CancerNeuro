@@ -48,7 +48,7 @@ https://gatk.broadinstitute.org/hc/en-us/articles/360035889931-Funcotator-Inform
 ### 2. Identify Significantly Mutated Genes
 * Requirements
    - MATLAB: R2021b
-   - [MutSig2CV:](https://github.com/getzlab/MutSig2CV)
+   - [MutSig2CV](https://github.com/getzlab/MutSig2CV)
 
 * Execution Command
    - MutSig2CV(<path to mutations>, <path to output directory>)
