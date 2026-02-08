@@ -177,28 +177,28 @@ topTable(
 #### Execution Command
 
 ```r
-- # ConsensusClusterPlus function for determing cluster number and class membership by stability evidence.
-- ConsensusClusterPlus(
--   d = dt,
--   maxK = 9,
--   reps = 100,
--   pItem = 0.8,
--   pFeature = 1,
--   clusterAlg = "hc",
--   title = "hcPearsonWardAverCluster",
--   innerLinkage = "ward.D2",
- -  finalLinkage = "average",
--   distance = "pearson",
--   ml = NULL,
--   tmyPal = NULL,
--   seed = 1024,
--   plot = "png",
- -  writeTable = FALSE,
-- weightsItem = NULL,
-- weightsFeature = NULL,
-- verbose = TRUE,
-- corUse = "pairwise.complete.obs"
-- )
+# ConsensusClusterPlus function for determing cluster number and class membership by stability evidence.
+ConsensusClusterPlus(
+  d = dt,
+  maxK = 9,
+  reps = 100,
+  pItem = 0.8,
+  pFeature = 1,
+  clusterAlg = "hc",
+  title = "hcPearsonWardAverCluster",
+  innerLinkage = "ward.D2",
+  finalLinkage = "average",
+  distance = "pearson",
+  ml = NULL,
+  tmyPal = NULL,
+  seed = 1024,
+  plot = "png",
+  writeTable = FALSE,
+  weightsItem = NULL,
+  weightsFeature = NULL,
+  verbose = TRUE,
+  corUse = "pairwise.complete.obs"
+ )
 ```
 
 #### Parameter Description
