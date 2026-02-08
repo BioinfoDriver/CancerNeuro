@@ -93,25 +93,39 @@ https://gatk.broadinstitute.org/hc/en-us/articles/360035889931-Funcotator-Inform
    - calculate_APC_threshold: Logical; if FALSE, skips calculation of the APC threshold.
    - For detailed documentation, tutorials, and advanced parameter settings, please refer to the [select](http://ciriellolab.org/select/select.html) repository.
 
-## Instructions for Use
+### 4. Identification of Differentially Expressed Genes
+* Requirements
+   - R: Version 4.0.2
+   - [limma](https://bioconductor.org/packages/release/bioc/html/limma.html): Version 3.58.1
+
+* Execution Command
+   - r
+   - # Fit linear model for each gene given a series of arrays
+   - fit <- lmFit(object = eset, design = design)
+   - # Empirical Bayes Statistics for Differential Expression
+   - fit <- eBayes(fit = fit)
+   - # Table of Top Genes from Linear Model Fit
+   - topTable(fit, coef = "typeTumor", adjust.method = "BH", n = Inf)
+
+* Parameter Description
+   - object: A matrix-like data object containing log-transformed expression values, with rows as genes and columns as samples.
+   - design: design matrix specifying the experimental model. Rows correspond to samples, columns correspond to model coefficients to be estimated..
+   - fit: A fitted limma model object returned by lmFit.
+   - coef: column name or index in the design matrix specifying the coefficient (contrast) of interest for differential expression testing..
+   - adjust.method: method used to adjust the p-values for multiple testing.
+   - n: maximum number of genes to return in the results.
+   - For comprehensive documentation, tutorials, and advanced parameter settings, please refer to the [limma](https://bioconductor.org/packages/release/bioc/html/limma.html) package.
+
+## Instructions for Data Download
 For readers who want to obtain raw/result data, locate data file, then download it with one of following ways:
-
 * In Github, download file by clicking either `Download` button or `Raw` button at corresponding data page
-
 * Use linux command `wget` or `curl`, fo example, you can download neurotransmitter receptors by
-
   wget `https://github.com/BioinfoDriver/CancerNeuro/tree/main/data/neurotransmitterReceptors.rds`
-
 Or you can download whole respository with one of following ways:
-
 * Clone this repository with `git clone https://github.com/BioinfoDriver/CancerNeuro.git`
-
 * Download whole respository by clicking `Download` button at top right of url page https://github.com/BioinfoDriver/CancerNeuro
-
-## Reproduce analysis
-
-For readers who want to reproduce analysis shown in manuscript, please [install R](https://cran.r-project.org/) in your computer.
 
 ## Test Environment
 * System: **Linux**
 * Software: **R v4.0.2**
+* Software: **Matlab v4.0.2**
