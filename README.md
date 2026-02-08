@@ -122,7 +122,7 @@ R: Version 4.0.2
 [ConsensusClusterPlus](https://bioconductor.org/packages/release/bioc/html/ConsensusClusterPlus.html): Version 1.66.0
 
 * Execution Command
-r
+- r
 - # ConsensusClusterPlus function for determing cluster number and class membership by stability evidence.
 - ConsensusClusterPlus(
 -   d = dt,
@@ -145,6 +145,7 @@ r
 - verbose = TRUE,
 - corUse = "pairwise.complete.obs"
 - )
+
 
 * Parameter Description
 - d: data to be clustered.
