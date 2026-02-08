@@ -45,7 +45,7 @@ Cancer neuroscience highlights the critical role of neural signaling in tumor bi
 [Funcotator Information and Tutorial](
 https://gatk.broadinstitute.org/hc/en-us/articles/360035889931-Funcotator-Information-and-Tutorial).
 
-### 2. Identify Significantly Mutated Genes
+### 2. Identifying Significantly Mutated Genes
 * Requirements
    - MATLAB: R2021b
    - [MutSig2CV](https://github.com/getzlab/MutSig2CV)
