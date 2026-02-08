@@ -62,7 +62,6 @@ Cancer neuroscience highlights the critical role of neural signaling in tumor bi
 - **Broad Institute Funcotator data sources (Google Cloud Storage browser):**
   https://console.cloud.google.com/storage/browser/broad-public-datasets/funcotator
 
----
 
 ### 2. Identifying Significantly Mutated Genes (MutSig2CV)
 
@@ -86,7 +85,6 @@ MutSig2CV(<path_to_mutations>, <path_to_output_directory>)
 
 - **For detailed usage, parameter options, and documentation, please refer to the official [MutSig2CV](https://github.com/getzlab/MutSig2CV) repository.**
 
----
 
 ### 3. Identifying Conditional Selection between Alterations (Mutual Exclusivity and Co-occurrence)
 
@@ -129,7 +127,6 @@ select(
 
 - **For detailed documentation, tutorials, and advanced parameter settings, please refer to the [select](http://ciriellolab.org/select/select.html) repository.**
 
----
 
 ### 4. Identification of Differentially Expressed Genes (limma)
 
@@ -169,7 +166,6 @@ topTable(
 
 - **For comprehensive documentation, tutorials, and advanced parameter settings, please refer to the [limma](https://bioconductor.org/packages/release/bioc/html/limma.html) package.**
 
----
 
 ### 5. Identification of Neuroregulatory Subtypes by Consensus Clustering
 
@@ -231,7 +227,6 @@ topTable(
 
 - **For detailed documentation, tutorials, and advanced parameter settings, please refer to the [ConsensusClusterPlus](https://bioconductor.org/packages/release/bioc/html/ConsensusClusterPlus.html) Bioconductor repository.**
 
----
 ## Instructions for Data Download
 For readers who want to obtain raw/result data, locate data file, then download it with one of following ways:
 * In Github, download file by clicking either `Download` button or `Raw` button at corresponding data page
