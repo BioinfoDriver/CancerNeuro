@@ -1,9 +1,6 @@
-# CancerNeuro
-Comprehensive Molecular Characterization of Neurotransmitter Receptors and Clinical Relevance of Common Neuroregulatory Subtypes across Human Cancer Types
-
 ## Overview
 
-Purpose of this repository is to share analysis procedure, data and help readers or reviewers to know more detail of this work, reproduce or make use of results they are interested in.
+Cancer neuroscience highlights the critical role of neural signaling in tumor biology, yet a comprehensive pan-cancer understanding of neuroregulatory dysregulation remains lacking. Here, we systematically characterized 130 neurotransmitter receptor (NTR) genes across 9,125 tumors from 33 cancer types, and performed validation using multiple independent cohorts. This repository aims to share the analytical workflows, processed data, and supporting resources to facilitate deeper understanding of this study, enable reproducibility, and support reuse of results of interest by readers and reviewers. Detailed package version specifications, complete parameter settings for the major analytical procedures, and guidance for the core analysis steps are provided in the README.md file. Additional scripts implementing specific functions can be accessed by referencing the corresponding script files.
 
 ## Repo Contents
 
