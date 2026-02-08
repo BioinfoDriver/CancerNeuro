@@ -16,7 +16,7 @@ Cancer neuroscience highlights the critical role of neural signaling in tumor bi
 * [result](https://github.com/BioinfoDriver/CancerNeuro/tree/main/result): This directory contains key intermediate and final outputs from the analyses, including processed tables, statistical summaries, and visualization-ready files that support the findings presented in the manuscript.
 
 ## Instructions for Core Analytical Procedures
-### Annotating Genomic Point Mutations and Short Indels
+### 1. Annotating Genomic Point Mutations and Short Indels
 * Requirements
    - Java: Version 1.8 
    - GATK4: 4.6.2.0
