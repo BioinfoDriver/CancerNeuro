@@ -116,6 +116,59 @@ https://gatk.broadinstitute.org/hc/en-us/articles/360035889931-Funcotator-Inform
    - n: maximum number of genes to return in the results.
    - For comprehensive documentation, tutorials, and advanced parameter settings, please refer to the [limma](https://bioconductor.org/packages/release/bioc/html/limma.html) package.
 
+### 5. Identified of Neuroregulatory Subtypes by Consensus Clustering
+* Requirements
+R: Version 4.0.2
+[ConsensusClusterPlus](https://bioconductor.org/packages/release/bioc/html/ConsensusClusterPlus.html): Version 1.66.0
+
+* Execution Command
+r
+- # ConsensusClusterPlus function for determing cluster number and class membership by stability evidence.
+- ConsensusClusterPlus(
+-   d = dt,
+-   maxK = 9,
+-   reps = 100,
+-   pItem = 0.8,
+-   pFeature = 1,
+-   clusterAlg = "hc",
+-   title = "hcPearsonWardAverCluster",
+-   innerLinkage = "ward.D2",
+ -  finalLinkage = "average",
+-   distance = "pearson",
+-   ml = NULL,
+-   tmyPal = NULL,
+-   seed = 1024,
+-   plot = "png",
+ -  writeTable = FALSE,
+- weightsItem = NULL,
+- weightsFeature = NULL,
+- verbose = TRUE,
+- corUse = "pairwise.complete.obs"
+- )
+
+* Parameter Description
+- d: data to be clustered.
+- maxK: maximum cluster number to evaluate..
+- reps: number of subsamples.
+- pItem: proportion of items to sample.
+- pFeature: proportion of features to sample.
+- clusterAlg: cluster algorithm.
+- title: character value for output directory.
+- innerLinkage: hierarchical linkage method for subsampling.
+- finalLinkage: hierarchical linkage method for consensus matrix.
+- distance: distance measure.
+- ml: optional. prior result, if supplied then only do graphics and tables.
+- tmyPal: optional character vector of colors for consensus matrix.
+- seed: sets random seed for reproducible results.
+- plot: character value. NULL - print to screen, 'pdf', 'png', 'pngBMP' for bitmap png, helpful for large datasets.
+- writeTable: logical value. TRUE - write ouput and log to csv.
+- weightsItem: weights to be used for sampling items.
+- weightsFeature: weights to be used for sampling features.
+- verbose: boolean. If TRUE, print messages to the screen to indicate progress..
+- corUse: specifies how to handle missing data in correlation distances.
+
+- For detailed documentation, tutorials, and advanced parameter settings, please refer to the [ConsensusClusterPlus](https://bioconductor.org/packages/release/bioc/html/ConsensusClusterPlus.html) Bioconductor repository.
+
 ## Instructions for Data Download
 For readers who want to obtain raw/result data, locate data file, then download it with one of following ways:
 * In Github, download file by clicking either `Download` button or `Raw` button at corresponding data page
