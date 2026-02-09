@@ -1,11 +1,11 @@
 
 # load data
-load(file='D:/CancerNeuroscience/Github/data/lihc_lasso_binomial_res.RData')
-load(file='F:/PostdoctoralDataBackup/DesktopCP/E/ExpressionITHProject/GitHub/data/lec_snorri_s_thorgeirsson_expr_data.RData')
-nci.linc.cli.data <- readRDS(file='F:/PostdoctoralDataBackup/DesktopCP/E/ExpressionITHProject/GitHub/data/lec_snorri_s_thorgeirsson_cli_data.rds')
+load(file='/data/lihc_lasso_binomial_res.RData')
+load(file='/data/lec_snorri_s_thorgeirsson_expr_data.RData')
+nci.linc.cli.data <- readRDS(file='/data/lec_snorri_s_thorgeirsson_cli_data.rds')
 
 
-load('F:/PostdoctoralDataBackup/DesktopCP/E/ExpressionITHProject/GitHub/data/exp_gene_anno.RData')
+load('/data/exp_gene_anno.RData')
 nci.lihc.exp.data <- batch.expr.max.data
 nci.lihc.exp.data <- nci.lihc.exp.data %>% dplyr::select(-GeneID, -Symbol, -ID)
 nci.lihc.exp.data <- nci.lihc.exp.data[intersect(rownames(nci.lihc.exp.data), exp.gene.anno$GeneID), ]
@@ -46,19 +46,19 @@ nci.linc.cli.data <- cbind(nci.linc.cli.data, lec.risk.score[nci.linc.cli.data$A
 
 
 # survival plot 
-source('F:/PostdoctoralDataBackup/DesktopCP/E/ExpressionITHProject/GitHub/code/Rscript/survival_plot.R')
+source('/code/Rscript/survival_plot.R')
 
 nci.linc.cli.data$OS_Status[nci.linc.cli.data$OS_Time > 365.25 *5] <- 0
 nci.linc.cli.data$OS_Time[nci.linc.cli.data$OS_Time > 365.25 *5] <- 365.25 * 5
 
 SurvivalPlot(survival.data=nci.linc.cli.data[, c('Array', 'OS_Time', 'OS_Status')], 
              sample.class=nci.linc.cli.data[, c('Array', 'risk.categ')], filename='nci_lihc_os.pdf', 
-             out.file.path='D:/CancerNeuroscience/Github/result/section5/lihclike/')
+             out.file.path='/result/section5/lihclike/')
 
-saveRDS(nci.linc.cli.data, file='D:/CancerNeuroscience/Github/data/lihcRiskScores/nci_risk_score.rds')
+saveRDS(nci.linc.cli.data, file='/data/lihcRiskScores/nci_risk_score.rds')
 
 ########### Cox
-cli.sig.char <- readRDS(file='D:/CancerNeuroscience/Github/data/lihcRiskScores/nci_risk_score.rds')
+cli.sig.char <- readRDS(file='/data/lihcRiskScores/nci_risk_score.rds')
 colnames(cli.sig.char)[2:3] <- c('os_time','os')
 cli.sig.char$risk.categ <- factor(cli.sig.char$risk.categ, levels=c('low risk', 'high risk'))
 
@@ -109,3 +109,4 @@ UnivariateCox <- function(cli.data, covariates)
 uni.cox.res <- UnivariateCox(cli.data = cli.sig.char, covariates=colnames(cli.sig.char)[6])
 #                       variate                     HR            p.value
 # risk.categ risk.categhigh risk 1.7891 (1.1029-2.9022) 0.0184259918429043
+
