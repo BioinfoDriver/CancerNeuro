@@ -51,11 +51,11 @@ source('/code/Rscript/survival_plot.R')
 
 SurvivalPlot(survival.data=fulci.linc.cli.data[, c('LCS.ID', 'Survival.months', 'Survival.status')], 
              sample.class=fulci.linc.cli.data[, c('LCS.ID', 'risk.categ')], filename='fulci_lihc_os.pdf', 
-             out.file.path='D:/CancerNeuroscience/Github/result/section5/lihclike/')
+             out.file.path='/result/section5/lihclike/')
 
 SurvivalPlot(survival.data=fulci.linc.cli.data[, c('LCS.ID', 'Recurr.months', 'Recurr.status')], 
              sample.class=fulci.linc.cli.data[, c('LCS.ID', 'risk.categ')], filename='fulci_lihc_rfs.pdf', 
-             out.file.path='D:/CancerNeuroscience/Github/result/section5/lihclike/')
+             out.file.path='/result/section5/lihclike/')
 
 
 saveRDS(fulci.linc.cli.data, file='/data/lihcRiskScores/fulci_risk_score.rds')
@@ -150,3 +150,4 @@ uni.mul.cox.res <- Cox.function(time=cli.sig.char$os_time, event=cli.sig.char$os
 
 # multiv HR (95% CI for HR) multiv p value
 # 0.0241    1.7164 (1.1097-2.6547)         0.0152
+
