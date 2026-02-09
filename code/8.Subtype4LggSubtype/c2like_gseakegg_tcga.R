@@ -7,8 +7,8 @@ library('org.Hs.eg.db')
 library('enrichplot')
 
 # load data
-tcga.lgg.cli.data <- readRDS(file='D:/CancerNeuroscience/Github/data/LggRiskScores/tcga_lgg_risk_score.rds')
-load(file = 'D:/CancerNeuroscience/Github/data/panCanGeneExpData.RData')
+tcga.lgg.cli.data <- readRDS(file='/data/LggRiskScores/tcga_lgg_risk_score.rds')
+load(file = '/data/panCanGeneExpData.RData')
 tcga.lgg.exp <- panCanTurGeneExp[, intersect(colnames(panCanTurGeneExp), tcga.lgg.cli.data$patient_id)]
 
 
@@ -42,13 +42,13 @@ gseakegg <- gseKEGG(geneList = gene.list, organism = 'hsa',
 
 gseakegg <- setReadable(gseakegg, OrgDb = org.Hs.eg.db, keyType="ENTREZID")
 
-# save(difRes, ego, ekegg, gseakegg, file = 'D:/CancerNeuroscience/Github/data/tcga_lgg_c2like_gokegg_enrich.RData')
+# save(difRes, ego, ekegg, gseakegg, file = '/data/tcga_lgg_c2like_gokegg_enrich.RData')
 
 
 ################ plot
-# write.table(ego, file = 'D:/CancerNeuroscience/Github/result/section5/lgglike/goenrich.txt', sep = '\t', col.names = T, row.names = F, quote = F)
-# write.table(ekegg, file = 'D:/CancerNeuroscience/Github/result/section5/lgglike/keggenrich.txt', sep = '\t', col.names = T, row.names = F, quote = F)
-# write.table(gseakegg, file = 'D:/CancerNeuroscience/Github/result/section5/lgglike/kegggsea.txt', sep = '\t', col.names = T, row.names = F, quote = F)
+# write.table(ego, file = '/result/section5/lgglike/goenrich.txt', sep = '\t', col.names = T, row.names = F, quote = F)
+# write.table(ekegg, file = '/result/section5/lgglike/keggenrich.txt', sep = '\t', col.names = T, row.names = F, quote = F)
+# write.table(gseakegg, file = '/result/section5/lgglike/kegggsea.txt', sep = '\t', col.names = T, row.names = F, quote = F)
 
 
 categorys <- c('Glutamatergic synapse', 'GABAergic synapse', 'Dopaminergic synapse', 'Serotonergic synapse', 'Cholinergic synapse', 
@@ -73,7 +73,7 @@ categorys <- c('Glutamatergic synapse', 'GABAergic synapse', 'Dopaminergic synap
                'Chemokine signaling pathway')
 
 
-pdf('D:/CancerNeuroscience/Github/result/section5/lgglike/gsea_kegg.pdf')
+pdf('/result/section5/lgglike/gsea_kegg.pdf')
 dotplot(gseakegg, showCategory=categorys, split=".sign") + facet_grid(.~.sign)
 
 gseaplot2(gseakegg, geneSetID = c(46, 61, 63), pvalue_table = TRUE,
@@ -89,3 +89,4 @@ gseaplot2(gseakegg, geneSetID = c(18, 24, 53), pvalue_table = TRUE,
           color = c("#E495A5", "#86B875", "#7DB0DD"), ES_geom = "line")
 
 dev.off()
+
