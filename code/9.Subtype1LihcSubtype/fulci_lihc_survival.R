@@ -1,11 +1,11 @@
 
 # load data
-fulci.linc.cli.data <- readRDS(file='F:/PostdoctoralDataBackup/DesktopCP/E/ExpressionITHProject/GitHub/data/lci_xinweiwang_cli_data.rds')
-load(file='F:/PostdoctoralDataBackup/DesktopCP/E/ExpressionITHProject/GitHub/data/lci_xinweiwang_expr_data.RData')
-load(file='D:/CancerNeuroscience/Github/data/lihc_lasso_binomial_res.RData')
+fulci.linc.cli.data <- readRDS(file='/data/lci_xinweiwang_cli_data.rds')
+load(file='/data/lci_xinweiwang_expr_data.RData')
+load(file='/data/lihc_lasso_binomial_res.RData')
 
 
-load('F:/PostdoctoralDataBackup/DesktopCP/E/ExpressionITHProject/GitHub/data/exp_gene_anno.RData')
+load('/data/exp_gene_anno.RData')
 fulci.lihc.exp.data <- gene.max.exp.profile
 fulci.lihc.exp.data <- fulci.lihc.exp.data %>% dplyr::select(-ID, -ENTREZ_GENE_ID, -`Gene Symbol`)
 fulci.lihc.exp.data <- fulci.lihc.exp.data[intersect(rownames(fulci.lihc.exp.data), exp.gene.anno$GeneID), ]
@@ -47,7 +47,7 @@ fulci.linc.cli.data <- cbind(fulci.linc.cli.data, lci.risk.score[fulci.linc.cli.
 
 
 # survival plot 
-source('F:/PostdoctoralDataBackup/DesktopCP/E/ExpressionITHProject/GitHub/code/Rscript/survival_plot.R')
+source('/code/Rscript/survival_plot.R')
 
 SurvivalPlot(survival.data=fulci.linc.cli.data[, c('LCS.ID', 'Survival.months', 'Survival.status')], 
              sample.class=fulci.linc.cli.data[, c('LCS.ID', 'risk.categ')], filename='fulci_lihc_os.pdf', 
@@ -58,12 +58,12 @@ SurvivalPlot(survival.data=fulci.linc.cli.data[, c('LCS.ID', 'Recurr.months', 'R
              out.file.path='D:/CancerNeuroscience/Github/result/section5/lihclike/')
 
 
-saveRDS(fulci.linc.cli.data, file='D:/CancerNeuroscience/Github/data/lihcRiskScores/fulci_risk_score.rds')
+saveRDS(fulci.linc.cli.data, file='/data/lihcRiskScores/fulci_risk_score.rds')
 
 
 ######COX
 # load data
-lci.risk.score <- readRDS(file='D:/CancerNeuroscience/Github/data/lihcRiskScores/fulci_risk_score.rds')
+lci.risk.score <- readRDS(file='/data/lihcRiskScores/fulci_risk_score.rds')
 
 lci.risk.score <- lci.risk.score[, c(3, 5, 	8:18, 24, 19, 20)]
 colnames(lci.risk.score) <- c('Affy_GSM',  'Metastasis_risk', 'Gender', 'Age', 'HBV_status', 'ALT', 'Tumor_size', 
@@ -144,26 +144,9 @@ cli.sig.char <- cli.sig.char[, c('Affy_GSM', 'os', 'os_time', 'risk.categ', 'Age
                                  'Cirrhosis', 'AFP', "TNM_staging", "BCLC_staging", "CLIP_staging")]
 cli.sig.char <- cli.sig.char[apply(cli.sig.char, 1, function(x) !any(is.na(x))), ]
 
-source('F:/PostdoctoralDataBackup/DesktopCP/E/ExpressionITHProject/GitHub/code/Rscript/Cox.function.R')
+source('/code/Rscript/Cox.function.R')
 uni.mul.cox.res <- Cox.function(time=cli.sig.char$os_time, event=cli.sig.char$os, 
                                 clinical.data=cli.sig.char, clinical.variate = c(4:8, 11))
 
 # multiv HR (95% CI for HR) multiv p value
 # 0.0241    1.7164 (1.1097-2.6547)         0.0152
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
