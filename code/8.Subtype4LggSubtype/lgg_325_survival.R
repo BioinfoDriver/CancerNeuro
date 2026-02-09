@@ -3,13 +3,13 @@ library('DESeq2')
 library('dplyr')
 
 # read count data
-exp.count <- read.csv(file = 'D:/CancerNeuroscience/data/GliomaData/CGGA.mRNAseq_325.Read_Counts-genes.20220620.txt', 
+exp.count <- read.csv(file = '/data/GliomaData/CGGA.mRNAseq_325.Read_Counts-genes.20220620.txt', 
                       header = T, sep = '\t', stringsAsFactors = F)
 
 exp.count <- exp.count %>% tibble::column_to_rownames(var = 'gene_name')
 
 # read clinical data
-cli.data <- read.csv(file = 'D:/CancerNeuroscience/data/GliomaData/CGGA.mRNAseq_325_clinical.20200506.txt', 
+cli.data <- read.csv(file = '/data/GliomaData/CGGA.mRNAseq_325_clinical.20200506.txt', 
                      header = T, sep = '\t', stringsAsFactors = F)
 
 cli.data <- cli.data %>% tibble::column_to_rownames(var = 'CGGA_ID')
@@ -35,7 +35,7 @@ sub.cli.data <- sub.cli.data[intersect(colnames(exp.data), rownames(sub.cli.data
 
 
 # risk evaluation
-load(file='D:/CancerNeuroscience/Github/data/lgg_lasso_binomial_res.RData')
+load(file='/data/lgg_lasso_binomial_res.RData')
 RiskEsti <- function(exp.dat, gene.set, risk.coef, cut.off=NULL){
   
   # exp.dat <- as.matrix(exp.dat[intersect(rownames(exp.dat), gene.set), ])
@@ -58,13 +58,13 @@ colnames(sub.cli.data)[1] <- 'patient_id'
 
 
 # survival plot 
-source('D:/CancerNeuroscience/Github/code/0.DataPreparation/survival_plot.R')
+source('/code/0.DataPreparation/survival_plot.R')
 
 SurvivalPlot(survival.data=sub.cli.data[, c('patient_id', 'OS', 'Censor..alive.0..dead.1.')], 
              sample.class=sub.cli.data[, c('patient_id', 'risk.categ')], filename='plgg_325_os.pdf', 
-             out.file.path='D:/CancerNeuroscience/Github/result/section5/lgglike/')
+             out.file.path='/result/section5/lgglike/')
 
-saveRDS(sub.cli.data, file='D:/CancerNeuroscience/Github/data/LggRiskScores/plgg_325_risk_score.rds')
+saveRDS(sub.cli.data, file='/data/LggRiskScores/plgg_325_risk_score.rds')
 
 
 
@@ -284,7 +284,7 @@ Cox.function <- function(time, event, clinical.data, clinical.variate = NULL){
   return(cox.result)
 }
 
-sub.cli.data <- readRDS(file='D:/CancerNeuroscience/Github/data/LggRiskScores/plgg_325_risk_score.rds')
+sub.cli.data <- readRDS(file='/data/LggRiskScores/plgg_325_risk_score.rds')
 
 # > mean(sub.cli.data$Age, na.rm = T)
 # [1] 40.66667
@@ -311,4 +311,5 @@ uni.cox.res <- UnivariateCox(cli.data = cli.sig.char, covariates=colnames(cli.si
 cli.sig.char <- cli.sig.char[apply(cli.sig.char, 1, function(x) !any(is.na(x))), ]
 uni.mul.cox.res <- Cox.function(time=cli.sig.char$os_time, event=cli.sig.char$os, 
                                 clinical.data=cli.sig.char, clinical.variate = c(4:11))
+
 
