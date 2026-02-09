@@ -5,7 +5,7 @@ library('survival')
 
 
 # TCGA-LGG
-tcga.lgg.cli.data <- readRDS(file='D:/CancerNeuroscience/Github/data/LggRiskScores/tcga_lgg_risk_score.rds')
+tcga.lgg.cli.data <- readRDS(file='/data/LggRiskScores/tcga_lgg_risk_score.rds')
 tcga.lgg.cli.data <- tcga.lgg.cli.data %>% select(os_time, os, risk.categ, age, histological_grade) %>% na.omit()
 
 # Run the cox model
@@ -30,7 +30,7 @@ tcgaDCA <- dca(Surv(os_time, os) ~ os_C4 + os_Age + os_Grade + os_Full, data = t
 
 
 # CGGA-mRNAseq1 cohort
-mseq1.lgg.cli.data <- readRDS(file='D:/CancerNeuroscience/Github/data/LggRiskScores/plgg_693_risk_score.rds')
+mseq1.lgg.cli.data <- readRDS(file='/data/LggRiskScores/plgg_693_risk_score.rds')
 mseq1.lgg.cli.data <- mseq1.lgg.cli.data %>% select(Grade, Age, OS, Censor..alive.0..dead.1., risk.categ) %>% 
   rename(os_time = OS, os = Censor..alive.0..dead.1.) %>% na.omit()
 
@@ -56,7 +56,7 @@ mRNAseq1DCA <- dca(Surv(os_time, os) ~ os_C4 + os_Age + os_Grade + os_Full, data
 
 
 # CGGA-mRNAseq2 cohort
-mseq2.lgg.cli.data <- readRDS(file='D:/CancerNeuroscience/Github/data/LggRiskScores/plgg_325_risk_score.rds')
+mseq2.lgg.cli.data <- readRDS(file='/data/LggRiskScores/plgg_325_risk_score.rds')
 mseq2.lgg.cli.data <- mseq2.lgg.cli.data %>% select(Grade, Age, OS, Censor..alive.0..dead.1., risk.categ) %>% 
   rename(os_time = OS, os = Censor..alive.0..dead.1.) %>% na.omit()
 
@@ -82,7 +82,7 @@ mRNAseq2DCA <- dca(Surv(os_time, os) ~ os_C4 + os_Age + os_Grade + os_Full, data
 
 
 # CGGA-mRNA-array1 cohort
-arr1.lgg.cli.data <- readRDS(file='D:/CancerNeuroscience/Github/data/LggRiskScores/plgg_301_risk_score.rds')
+arr1.lgg.cli.data <- readRDS(file='/data/LggRiskScores/plgg_301_risk_score.rds')
 arr1.lgg.cli.data <- arr1.lgg.cli.data %>% select(Grade, Age, OS, Censor..alive.0..dead.1., risk.categ) %>% 
   rename(os_time = OS, os = Censor..alive.0..dead.1.) %>% na.omit()
 
@@ -108,7 +108,7 @@ array1DCA <- dca(Surv(os_time, os) ~ os_C4 + os_Age + os_Grade + os_Full, data =
 
 
 # mRNA-array2 cohort
-arr2.lgg.cli.data <- readRDS(file='D:/CancerNeuroscience/Github/data/LggRiskScores/plgg_GSE55918_risk_score.rds')
+arr2.lgg.cli.data <- readRDS(file='/data/LggRiskScores/plgg_GSE55918_risk_score.rds')
 arr2.lgg.cli.data <- arr2.lgg.cli.data %>% select(Tumor.grade, Age, Survival.time.months, Censored, risk.categ) %>% 
   rename(Grade = Tumor.grade, os_time = Survival.time.months, os = Censored) %>% na.omit() %>% 
   mutate(Grade = factor(Grade, levels = c('G2', 'G3')))
@@ -136,5 +136,6 @@ array2DCA <- dca(Surv(os_time, os) ~ os_C4 + os_Age + os_Grade + os_Full, data =
 
 ggsave(plot = patchwork::wrap_plots(tcgaDCA,mRNAseq1DCA,mRNAseq2DCA,array1DCA,array2DCA, ncol = 3), 
        width = 20, height = 12, units = 'cm',
-       filename = 'D:/CancerNeuroscience/Github/result/section5/lgglike/DCA_analysis.pdf')
+       filename = '/result/section5/lgglike/DCA_analysis.pdf')
+
 
