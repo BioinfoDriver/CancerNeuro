@@ -3,7 +3,7 @@ library('dplyr')
 library('GEOquery')
 
 # read exp data
-gse <- getGEO(filename = 'D:/CancerNeuroscience/data/GliomaData/GSE107850_series_matrix.txt')
+gse <- getGEO(filename = '/data/GliomaData/GSE107850_series_matrix.txt')
 norm.exp.data <- exprs(gse)
 cli.data <- pData(gse) 
 cli.data <- cli.data[, 42:51]
@@ -12,7 +12,7 @@ cli.data <- cli.data %>% mutate(age = as.numeric(age), pfs = as.numeric(pfs))
 
 
 # annotation data
-anno.data <- read.csv(file = 'D:/CancerNeuroscience/data/GliomaData/GPL14951-11332.txt', 
+anno.data <- read.csv(file = '/data/GliomaData/GPL14951-11332.txt', 
                       header = T, sep = '\t', stringsAsFactors = F, comment.char = '#')
 
 anno.data <- subset(anno.data, Source == 'RefSeq')
@@ -44,7 +44,7 @@ sub.cli.data <- sub.cli.data[intersect(colnames(exp.data), rownames(sub.cli.data
 
 
 # risk evaluation
-load(file='D:/CancerNeuroscience/Github/data/lgg_lasso_binomial_res.RData')
+load(file='/data/lgg_lasso_binomial_res.RData')
 RiskEsti <- function(exp.dat, gene.set, risk.coef, cut.off=NULL){
   
   # exp.dat <- as.matrix(exp.dat[intersect(rownames(exp.dat), gene.set), ])
@@ -67,15 +67,15 @@ colnames(sub.cli.data)[1] <- 'patient_id'
 
 
 # survival plot 
-source('D:/CancerNeuroscience/Github/code/0.DataPreparation/survival_plot.R')
+source('/code/0.DataPreparation/survival_plot.R')
 sub.cli.data <- sub.cli.data %>% mutate(pfs.event = ifelse(pfs.event == 'Yes', TRUE, FALSE))
 
 SurvivalPlot(survival.data=sub.cli.data[, c('patient_id', 'pfs', 'pfs.event')], 
              sample.class=sub.cli.data[, c('patient_id', 'risk.categ')], filename='plgg_GSE107850_pfs.pdf', 
-             out.file.path='D:/CancerNeuroscience/Github/result/section5/lgglike/')
+             out.file.path='/result/section5/lgglike/')
 
 
-saveRDS(sub.cli.data, file='D:/CancerNeuroscience/Github/data/LggRiskScores/plgg_GSE107850_risk_score.rds')
+saveRDS(sub.cli.data, file='/data/LggRiskScores/plgg_GSE107850_risk_score.rds')
 
 
 
@@ -296,7 +296,7 @@ Cox.function <- function(time, event, clinical.data, clinical.variate = NULL){
 }
 
 
-sub.cli.data <- readRDS(file='D:/CancerNeuroscience/Github/data/LggRiskScores/plgg_GSE107850_risk_score.rds')
+sub.cli.data <- readRDS(file='/data/LggRiskScores/plgg_GSE107850_risk_score.rds')
 # > mean(sub.cli.data$age)
 # [1] 43.94371
 sub.cli.data <- sub.cli.data %>% mutate(age_categ = ifelse(age >= 44, '>= 44', '<44'), gender = factor(gender,levels = c('Female', 'Male')), 
@@ -315,6 +315,7 @@ uni.cox.res <- UnivariateCox(cli.data = cli.sig.char, covariates=colnames(cli.si
 cli.sig.char <- subset(cli.sig.char, idh.status != 'undetermined')
 uni.mul.cox.res <- Cox.function(time=cli.sig.char$pfs, event=cli.sig.char$pfs.event, 
                                 clinical.data=cli.sig.char, clinical.variate = c(4:11))
+
 
 
 
