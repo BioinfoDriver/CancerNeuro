@@ -40,11 +40,11 @@ source('/code/Rscript/survival_plot.R')
 
 SurvivalPlot(survival.data=chcc.lihc.cli.data[, c('Tumor (T) sample ID', 'Overall survial (month)', 'Survial  (1, dead; 0, alive)')], 
              sample.class=chcc.lihc.cli.data[, c('Tumor (T) sample ID', 'risk.categ')], filename='chcc_lihc_os.pdf', 
-             out.file.path='D:/CancerNeuroscience/Github/result/section5/lihclike/')
+             out.file.path='/result/section5/lihclike/')
 
 SurvivalPlot(survival.data=chcc.lihc.cli.data[, c('Tumor (T) sample ID', 'Recurrence-free survival (month)', 'Recurrence  (1, yes; 0, no)')], 
              sample.class=chcc.lihc.cli.data[, c('Tumor (T) sample ID', 'risk.categ')], filename='chcc_lihc_rfs.pdf', 
-             out.file.path='D:/CancerNeuroscience/Github/result/section5/lihclike/')
+             out.file.path='/result/section5/lihclike/')
 
 
 saveRDS(chcc.lihc.cli.data, file='/data/lihcRiskScores/chcc_risk_score.rds')
@@ -140,5 +140,6 @@ uni.mul.cox.res <- Cox.function(time=cli.sig.char$os_time, event=cli.sig.char$os
 
 # multiv HR (95% CI for HR) multiv p value
 # 1.319 (0.8374-2.0775)         0.2323
+
 
 
