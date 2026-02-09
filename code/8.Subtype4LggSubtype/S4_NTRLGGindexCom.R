@@ -1,7 +1,7 @@
 
 
 nReceptors <- readRDS(file = '/data/neurotransmitterReceptors.rds')
-load(file='D:/CancerNeuroscience/Github/data/lgg_lasso_binomial_res.RData')
+load(file='/data/lgg_lasso_binomial_res.RData')
 S4signature <- active.k.vals.1se$entrez_id
 S4signature <- subset(nReceptors, NCBI.Gene.ID %in% S4signature)$Approved.symbol
 
@@ -76,7 +76,8 @@ library(ggplot2)
 vennPlot <- ggvenn(list('NTR-LGG index' = NTRLGGindex, 'S4-like LGG signature' = S4signature), 
                    show_elements = T, set_name_size = 5, text_size = 3)
 
-ggsave(filename = 'D:/CancerNeuroscience/Github/result/section5/lgglike/S4signatureNTRLGGindex.pdf', 
+ggsave(filename = '/result/section6/lgglike/S4signatureNTRLGGindex.pdf', 
        plot = vennPlot, units = 'cm', width = 8, height = 8)
+
 
 
