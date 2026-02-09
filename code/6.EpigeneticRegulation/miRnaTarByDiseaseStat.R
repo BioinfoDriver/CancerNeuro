@@ -2,7 +2,7 @@
 library(ggplot2)
 
 ###############
-nROfmiRNAflm <- readRDS(file = 'D:/CancerNeuroscience/Github/data/nROfmiRNARegulatorFLM.rds')
+nROfmiRNAflm <- readRDS(file = '/data/nROfmiRNARegulatorFLM.rds')
 
 nROfmiRNAflm <- subset(nROfmiRNAflm, pValue < 0.05)
 
@@ -12,7 +12,7 @@ coefDensityPlot <- ggplot(nROfmiRNAflm, aes(x = Estimate)) +geom_density(fill = 
   geom_vline(xintercept = -0.15, linetype = 'dashed', color = 'red', size = 0.5) + 
   theme_bw() + theme(axis.title = element_text(size = 8), axis.text = element_text(size = 7))
 
-ggsave(filename = 'D:/CancerNeuroscience/Github/result/section4/coefDensityPlot.pdf', 
+ggsave(filename = '/result/section4/coefDensityPlot.pdf', 
        plot = coefDensityPlot, width = 7, height = 7, units = 'cm')
 
 nROfmiRNAflm <- subset(nROfmiRNAflm, pValue < 0.05 & Estimate < -0.15)
@@ -115,6 +115,7 @@ nROfmiRNAflm %>% select(miRNA, nRgene, Disease) %>% group_by(miRNA, nRgene) %>% 
 # 20 hsa-miR-34a-5p  GRID1       7
 
 
-write.table(nROfmiRNAflm, file = 'D:/CancerNeuroscience/Github/result/section4/miRnaTarByDisease.txt', 
+write.table(nROfmiRNAflm, file = '/result/section4/miRnaTarByDisease.txt', 
             col.names = T, row.names = F, sep = '\t', quote = FALSE)
+
 
