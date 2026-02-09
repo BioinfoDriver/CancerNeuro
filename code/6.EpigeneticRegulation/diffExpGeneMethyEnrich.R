@@ -2,11 +2,11 @@ library('dplyr')
 library('tibble')
 library('ggplot2')
 ########################
-diffMethy <- readRDS(file = 'D:/CancerNeuroscience/Github/data/panCanDiffMethy.rds')
+diffMethy <- readRDS(file = '/data/panCanDiffMethy.rds')
 
 
 # Diff Expr
-nRDiffExp <- readRDS(file = 'D:/CancerNeuroscience/Github/data/panCanNrDiffExp.rds')
+nRDiffExp <- readRDS(file = '/data/panCanNrDiffExp.rds')
 nRDiffExp <- nRDiffExp %>% mutate(Estatus = ifelse(logFC > 1 & adj.P.Val < 0.05, 'Up', ifelse(logFC < -1 & adj.P.Val < 0.05, 'Down', 'Neutral')))
 colnames(nRDiffExp)[9] <- 'Symbol'
 
@@ -49,5 +49,6 @@ nrDownEnrichHyperPlot <- ggplot(dataStat, aes(x = Estatus, y = perc, fill = Msta
         legend.title = element_text(size = 7), legend.text = element_text(size = 6)) 
 
 
-ggsave(filename = 'D:/CancerNeuroscience/Github/result/section4/nrDownEnrichHyperPlot.pdf', 
+ggsave(filename = /result/section4/nrDownEnrichHyperPlot.pdf', 
        plot = nrDownEnrichHyperPlot, width = 7, height = 7, units = 'cm')
+
