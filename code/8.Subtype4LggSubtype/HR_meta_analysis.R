@@ -66,8 +66,8 @@ uniCox <- data.frame(dataset=c('TCGA RNAseq', 'CGGA RNAseq-1', 'CGGA RNAseq-2', 
 
 
 
-# RmetaHrMetaAnalysis(uniCox, 'fixed', TRUE, 'D:/CancerNeuroscience/Github/result/section5/lgglike/metaUniHRmetafor.pdf')
-MetaforHrMetaAnalysis(uniCox, 'FE', TRUE, 'D:/CancerNeuroscience/Github/result/section5/lgglike/metaUniHRrmeta.pdf')
+# RmetaHrMetaAnalysis(uniCox, 'fixed', TRUE, '/result/section5/lgglike/metaUniHRmetafor.pdf')
+MetaforHrMetaAnalysis(uniCox, 'FE', TRUE, '/result/section5/lgglike/metaUniHRrmeta.pdf')
 
 # hr        ci.lb        ci.ub         pval 
 # 3.432082e+00 2.886915e+00 4.080200e+00 2.291211e-44
@@ -78,8 +78,9 @@ mulCox <- data.frame(dataset=c('TCGA RNAseq', 'CGGA RNAseq-1', 'CGGA RNAseq-2', 
                       lower=c(1.03, 1.43, 1.07, 2.37, 2.10), upper=c(3.18, 4.56, 3.84, 9.04, 3.84), 
                       pvalue=c('3.83e-02', '1.52e-03', '3.05e-02', '7.57e-06', '1.63e-11'))
 
-# RmetaHrMetaAnalysis(mulCox, 'fixed', TRUE, 'D:/CancerNeuroscience/Github/result/section5/lgglike/metaMulHRmetafor.pdf')
-MetaforHrMetaAnalysis(mulCox, 'FE', TRUE, 'D:/CancerNeuroscience/Github/result/section5/lgglike/metaMulHRrmeta.pdf')
+# RmetaHrMetaAnalysis(mulCox, 'fixed', TRUE, '/result/section5/lgglike/metaMulHRmetafor.pdf')
+MetaforHrMetaAnalysis(mulCox, 'FE', TRUE, '/result/section5/lgglike/metaMulHRrmeta.pdf')
 
 # hr        ci.lb        ci.ub         pval 
+
 # 2.652620e+00 2.141059e+00 3.286408e+00 4.479135e-19 
