@@ -2,7 +2,7 @@
 library('tibble')
 
 # clinical data
-cli.data <- read.csv(file = 'D:/CancerNeuroscience/data/GliomaData/GSE55918_clinical_data.txt', header = T, sep = '\t', comment.char = '#')
+cli.data <- read.csv(file = '/data/GliomaData/GSE55918_clinical_data.txt', header = T, sep = '\t', comment.char = '#')
 
 cli.data <- cli.data %>% dplyr::rename(Tumor.grade = characteristics..Tumor.grade.diagnosis, Histological = characteristics..Histological.dianosis,
                                        Survival.time.months = characteristics..Survival.time..months., 
@@ -21,13 +21,13 @@ cli.data <- cli.data %>% remove_rownames() %>% column_to_rownames(var = 'raw.dat
 
 
 # expression data
-norm.exp <- read.csv(file = 'D:/CancerNeuroscience/data/GliomaData/GSE55918_Matrix_GliomaClusteringAnalysis.txt', header = T, sep = '\t')
+norm.exp <- read.csv(file = '/data/GliomaData/GSE55918_Matrix_GliomaClusteringAnalysis.txt', header = T, sep = '\t')
 norm.exp <- norm.exp %>% column_to_rownames(var = 'Probe.set.ID')
 norm.exp <- norm.exp[, rownames(cli.data)]
 
 
-probe.anno1 <- readxl::read_xls("D:/CancerNeuroscience/data/GliomaData/BA1_probe annotation.xls", col_names = T)
-probe.anno2 <- readxl::read_xls("D:/CancerNeuroscience/data/GliomaData/BA2_probe annotation.xls", col_names = T)
+probe.anno1 <- readxl::read_xls("/data/GliomaData/BA1_probe annotation.xls", col_names = T)
+probe.anno2 <- readxl::read_xls("/data/GliomaData/BA2_probe annotation.xls", col_names = T)
 colnames(probe.anno2)[2] <- 'Symbol'
 probe.anno1 <- probe.anno1 %>% column_to_rownames(var = 'orginal_id')
 probe.anno2 <- probe.anno2 %>% column_to_rownames(var = 'probe')
@@ -36,7 +36,7 @@ norm.exp1 <- merge(probe.anno1[, 'symbols', FALSE], norm.exp, by = 'row.names')
 norm.exp2 <- merge(probe.anno2, norm.exp, by = 'row.names')
 
 
-load(file='D:/CancerNeuroscience/Github/data/lgg_lasso_binomial_res.RData')
+load(file='/data/lgg_lasso_binomial_res.RData')
 
 norm.exp1 <- subset(norm.exp1, symbols %in% active.k.vals.1se$symbol)
 norm.exp1 <- norm.exp1[, -c(1)] %>% remove_rownames() %>% column_to_rownames(var = 'symbols')
@@ -71,14 +71,14 @@ colnames(sub.cli.data)[1] <- 'patient_id'
 
 
 # survival plot 
-source('D:/CancerNeuroscience/Github/code/0.DataPreparation/survival_plot.R')
+source('/code/0.DataPreparation/survival_plot.R')
 
 sub.cli.data$Survival.time.months <- round(sub.cli.data$Survival.time.months*30.25)
 SurvivalPlot(survival.data=sub.cli.data[, c('patient_id', 'Survival.time.months', 'Censored')], 
              sample.class=sub.cli.data[, c('patient_id', 'risk.categ')], filename='plgg_GSE55918_os.pdf', 
-             out.file.path='D:/CancerNeuroscience/Github/result/section5/lgglike/')
+             out.file.path='/result/section5/lgglike/')
 
-saveRDS(sub.cli.data, file='D:/CancerNeuroscience/Github/data/LggRiskScores/plgg_GSE55918_risk_score.rds')
+saveRDS(sub.cli.data, file='/data/LggRiskScores/plgg_GSE55918_risk_score.rds')
 
 
 
@@ -298,7 +298,7 @@ Cox.function <- function(time, event, clinical.data, clinical.variate = NULL){
   return(cox.result)
 }
 
-sub.cli.data <- readRDS(file='D:/CancerNeuroscience/Github/data/LggRiskScores/plgg_GSE55918_risk_score.rds')
+sub.cli.data <- readRDS(file='/data/LggRiskScores/plgg_GSE55918_risk_score.rds')
 # > mean(sub.cli.data$Age)
 # [1] 44.26177
 sub.cli.data <- sub.cli.data %>% mutate(age_categ = ifelse(Age >= 44, '>= 44', '<44'),
@@ -315,5 +315,6 @@ uni.cox.res <- UnivariateCox(cli.data = cli.sig.char, covariates=colnames(cli.si
 # 多因素cox分析
 uni.mul.cox.res <- Cox.function(time=cli.sig.char$os, event=cli.sig.char$os.event, 
                                 clinical.data=cli.sig.char, clinical.variate = c(4:7))
+
 
 
