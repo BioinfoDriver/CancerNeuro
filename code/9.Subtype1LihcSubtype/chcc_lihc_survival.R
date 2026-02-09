@@ -1,11 +1,11 @@
 
 # load data
-load(file='D:/CancerNeuroscience/Github/data/lihc_lasso_binomial_res.RData')
-chcc.lihc.norm.exp <- readRDS(file='F:/PostdoctoralDataBackup/DesktopCP/E/ExpressionITHProject/GitHub/data/Gao_Cell_2019_expr_data.rds')
-chcc.lihc.cli.data <- readRDS(file='F:/PostdoctoralDataBackup/DesktopCP/E/ExpressionITHProject/GitHub/data/Gao_Cell_2019_cli_data.rds')
+load(file='/data/lihc_lasso_binomial_res.RData')
+chcc.lihc.norm.exp <- readRDS(file='/data/Gao_Cell_2019_expr_data.rds')
+chcc.lihc.cli.data <- readRDS(file='/data/Gao_Cell_2019_cli_data.rds')
 
 
-load('F:/PostdoctoralDataBackup/DesktopCP/E/ExpressionITHProject/GitHub/data/exp_gene_anno.RData')
+load('/data/exp_gene_anno.RData')
 rownames(chcc.lihc.norm.exp) <- stringr::str_split_i(rownames(chcc.lihc.norm.exp ), '\\.', i = 1)
 chcc.lihc.norm.exp <- chcc.lihc.norm.exp[intersect(rownames(chcc.lihc.norm.exp ), exp.gene.anno$EnsemblID), ]
 rownames(chcc.lihc.norm.exp) <- exp.gene.anno$Symbol[match(rownames(chcc.lihc.norm.exp), exp.gene.anno$EnsemblID)]
@@ -36,7 +36,7 @@ chcc.lihc.cli.data <- cbind(chcc.lihc.cli.data, risk.score[rownames(chcc.lihc.cl
 
 
 # survival plot 
-source('F:/PostdoctoralDataBackup/DesktopCP/E/ExpressionITHProject/GitHub/code/Rscript/survival_plot.R')
+source('/code/Rscript/survival_plot.R')
 
 SurvivalPlot(survival.data=chcc.lihc.cli.data[, c('Tumor (T) sample ID', 'Overall survial (month)', 'Survial  (1, dead; 0, alive)')], 
              sample.class=chcc.lihc.cli.data[, c('Tumor (T) sample ID', 'risk.categ')], filename='chcc_lihc_os.pdf', 
@@ -47,10 +47,10 @@ SurvivalPlot(survival.data=chcc.lihc.cli.data[, c('Tumor (T) sample ID', 'Recurr
              out.file.path='D:/CancerNeuroscience/Github/result/section5/lihclike/')
 
 
-saveRDS(chcc.lihc.cli.data, file='D:/CancerNeuroscience/Github/data/lihcRiskScores/chcc_risk_score.rds')
+saveRDS(chcc.lihc.cli.data, file='/data/lihcRiskScores/chcc_risk_score.rds')
 
 ######COX
-lihc.risk.score <- readRDS(file='D:/CancerNeuroscience/Github/data/lihcRiskScores/chcc_risk_score.rds')
+lihc.risk.score <- readRDS(file='/data/lihcRiskScores/chcc_risk_score.rds')
 
 # data prepare
 cli.sig.char <- lihc.risk.score[, c(1, 4, 3, 10:15, 24, 25, 19:23, 45, 6, 8)]
@@ -134,10 +134,11 @@ cli.sig.char <- cli.sig.char[, c('patientID', 'os', 'os_time', 'risk.categ', 'ag
 cli.sig.char <- cli.sig.char[apply(cli.sig.char, 1, function(x) !any(is.na(x))), ]
 
 
-source('F:/PostdoctoralDataBackup/DesktopCP/E/ExpressionITHProject/GitHub/code/Rscript/Cox.function.R')
+source('/code/Rscript/Cox.function.R')
 uni.mul.cox.res <- Cox.function(time=cli.sig.char$os_time, event=cli.sig.char$os, 
                                 clinical.data=cli.sig.char, clinical.variate = c(4:8, 10))
 
 # multiv HR (95% CI for HR) multiv p value
 # 1.319 (0.8374-2.0775)         0.2323
+
 
