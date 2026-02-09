@@ -5,9 +5,9 @@ library('ComplexHeatmap')
 library('circlize')
 
 #############
-diffMethy <- readRDS(file = 'D:/CancerNeuroscience/Github/data/panCanDiffMethy.rds')
-nRDiffExp <- readRDS(file = 'D:/CancerNeuroscience/Github/data/panCanNrDiffExp.rds')
-panCanSurPvalue <- readRDS(file = 'D:/CancerNeuroscience/Github/data/panCanRhoSurUniMulLogPvalue_OS.rds')
+diffMethy <- readRDS(file = '/data/panCanDiffMethy.rds')
+nRDiffExp <- readRDS(file = '/data/panCanNrDiffExp.rds')
+panCanSurPvalue <- readRDS(file = '/data/panCanRhoSurUniMulLogPvalue_OS.rds')
 
 #############
 diffMethy <- diffMethy %>% subset(Mstatus != 'Neutral') %>% dplyr::rename(MlogFC = logFC)
@@ -85,7 +85,7 @@ MEassoRes %>% group_by(Symbol, Estatus, Mstatus) %>% distinct(DISEASE, .keep_all
 # 9 GRIK2  Down    Hyper       2
 # 10 HTR7  Down    Hyper       2
 
-write.table(MEassoRes, file = 'D:/CancerNeuroscience/Github/result/section4/methyNrExprExplain.txt',
+write.table(MEassoRes, file = '/result/section4/methyNrExprExplain.txt',
             col.names = T, row.names = F, sep = '\t', quote = F)
 
 
@@ -146,10 +146,11 @@ lgd <- list(Legend(title = "Exp log2Fc", col_fun = gcolFun, at = c(-5.5, -3.5, 0
             Legend(title = "Methy log2Fc", col_fun = mcolFun, at = c(-2, -1, 0, 1.5, 3.0), direction = "horizontal"))
 
 
-pdf(file = 'D:/CancerNeuroscience/Github/result/section4/methyNRExprAssoPlot.pdf', height = 10/2.54, width = 10/2.54)
+pdf(file = '/result/section4/methyNRExprAssoPlot.pdf', height = 10/2.54, width = 10/2.54)
 
 draw(methyExpAssoPlot, annotation_legend_list = lgd, 
      annotation_legend_side = "bottom", heatmap_legend_side = "bottom", merge_legend = TRUE)
 
 dev.off()
+
 
