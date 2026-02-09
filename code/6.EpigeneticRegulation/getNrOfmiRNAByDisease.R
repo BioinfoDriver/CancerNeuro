@@ -1,17 +1,17 @@
 
 
-nReceptors <- readRDS(file = 'D:/CancerNeuroscience/Github/data/neurotransmitterReceptors.rds')
+nReceptors <- readRDS(file = '/data/neurotransmitterReceptors.rds')
 nReceptors <- nReceptors %>% mutate(NCBI.Gene.ID == as.character(NCBI.Gene.ID))
 
-targetScan <- read.table(file = 'D:/CancerNeuroscience/data/TargetScan/Predicted_Targets_Context_Scores.default_predictions.txt', 
+targetScan <- read.table(file = '/data/TargetScan/Predicted_Targets_Context_Scores.default_predictions.txt', 
                          header = T, sep = '\t', stringsAsFactors = F)
 
 nROfmiRNA <- subset(targetScan, Gene.Tax.ID == 9606) %>% mutate(Gene.ID = sub("\\..*", "", Gene.ID)) %>% 
   subset(Gene.ID %in% nReceptors$Ensembl.gene.ID) %>% select(Gene.Symbol, miRNA) %>% distinct()
 
-load(file = 'D:/CancerNeuroscience/Github/data/expOfmiRNAs.RData')
+load(file = '/data/expOfmiRNAs.RData')
 # expOfmiRNAsStringent, expOfmiRNAsLoose
-load(file = 'D:/CancerNeuroscience/Github/data/expOfNrGenes.RData')
+load(file = '/data/expOfNrGenes.RData')
 # expOfNrGenesLoose, expOfNrGenesStringent
 
 
@@ -34,6 +34,7 @@ nROfmiRNAByDis <- sapply(names(expOfmiRNAsLoose), function(disease){
 })
 
 
-saveRDS(nROfmiRNAByDis, file = 'D:/CancerNeuroscience/Github/data/nROfmiRNAByDisease.rds')
+saveRDS(nROfmiRNAByDis, file = '/data/nROfmiRNAByDisease.rds')
+
 
 
