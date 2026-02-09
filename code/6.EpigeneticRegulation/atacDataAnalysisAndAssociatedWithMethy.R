@@ -4,8 +4,8 @@ library('rstatix')
 library('ggpubr')
 
 # ACAT data
-tcgaPanCanSamples <- readRDS(file = 'D:/CancerNeuroscience/Github/data/tcgaPanCanSamples.rds')
-atacPeakData <- read.csv(file = 'F:/PostdoctoralDataBackup/DesktopCP/F/BigData/UCSCXena/ATAT-seq_Hub/Pan-Cancer(PANCAN)/TCGA_ATAC_peak_Log2Counts_dedup_sample.gz', 
+tcgaPanCanSamples <- readRDS(file = '/data/tcgaPanCanSamples.rds')
+atacPeakData <- read.csv(file = '/data/BigData/UCSCXena/ATAT-seq_Hub/Pan-Cancer(PANCAN)/TCGA_ATAC_peak_Log2Counts_dedup_sample.gz', 
                          header = T, sep = '\t')
 colnames(atacPeakData) <- gsub('\\.', '-', colnames(atacPeakData))
 colnames(atacPeakData) <- stringr::str_sub(colnames(atacPeakData), 1, 15)
@@ -18,15 +18,15 @@ colnames(atacPeakData) <- stringr::str_sub(colnames(atacPeakData), 1, 15)
 atacPeakData <- tidyr::pivot_longer(data = atacPeakData, names_to = "SAMPLE_BARCODE", values_to = "ATAC_Score", cols = starts_with("TCGA"))
 colnames(atacPeakData)[1] <- 'id'
 
-tcgaPanCanSamples <- readRDS(file = 'D:/CancerNeuroscience/Github/data/tcgaPanCanSamples.rds')
+tcgaPanCanSamples <- readRDS(file = '/data/tcgaPanCanSamples.rds')
 
 atacPeakData <- inner_join(atacPeakData, tcgaPanCanSamples[, c('SAMPLE_BARCODE', 'DISEASE')], by = 'SAMPLE_BARCODE')
 
 
 # ACAT peak annotation
-atacPeakAnno <- read.csv(file = 'F:/PostdoctoralDataBackup/DesktopCP/F/BigData/UCSCXena/ATAT-seq_Hub/Pan-Cancer(PANCAN)/TCGA_ATAC_peak.all.probeMap', 
+atacPeakAnno <- read.csv(file = '/data/BigData/UCSCXena/ATAT-seq_Hub/Pan-Cancer(PANCAN)/TCGA_ATAC_peak.all.probeMap', 
          header = T, sep = '\t')
-diffMethy <- readRDS(file = 'D:/CancerNeuroscience/Github/data/panCanDiffMethy.rds')
+diffMethy <- readRDS(file = '/data/panCanDiffMethy.rds')
 
 
 # Finding overlapping genomic ranges
@@ -73,7 +73,7 @@ mProbeAtacPlot <- ggplot(mProbeAtacPeakData, aes(x = Mstatus, y = ATAC_Score)) +
 # [1] 157
 
 ######### Different expression
-nRDiffExp <- readRDS(file = 'D:/CancerNeuroscience/Github/data/panCanNrDiffExp.rds')
+nRDiffExp <- readRDS(file = '/data/panCanNrDiffExp.rds')
 nRDiffExp <- nRDiffExp %>% mutate(Estatus = ifelse(logFC > 1 & adj.P.Val < 0.05, 'Up', 
                                                    ifelse(logFC < -1 & adj.P.Val < 0.05, 'Down', 'Neutral'))) %>% 
   dplyr::rename(Symbol = Approved.symbol) %>% select(DISEASE, Symbol, Estatus)
@@ -114,69 +114,5 @@ nRDiffExpFilterAtacPlot <- ggplot(nRDiffExpFilterAtacData, aes(x = Estatus, y = 
 
 
 ggsave(plot = mProbeAtacPlot + nRDiffExpAtacPlot + nRDiffExpFilterAtacPlot, width = 20, height = 7, units = 'cm',
-       filename = 'D:/CancerNeuroscience/Github/result/section4/mProbeAtacScorePlot.pdf')
-
-
-######################### ATAC vs. Methylation vs. Expression
-load(file = 'D:/CancerNeuroscience/Github/data/panCanMethyData.RData')
-# panCanTurMethy, panCanPairdTurMethy, panCanPairdNormMethy
-load(file = 'D:/CancerNeuroscience/Github/data/panCanGeneExpData.RData')
-nReceptors <- readRDS(file = 'D:/CancerNeuroscience/Github/data/neurotransmitterReceptors.rds')
-nReceptors <- nReceptors %>% mutate(NCBI.Gene.ID = as.character(NCBI.Gene.ID))
-
-# Expression
-nrExp <- panCanTurGeneExp %>% select(any_of(unique(mProbeAtacPeakData$SAMPLE_BARCODE)))
-nrExp <- nrExp[nReceptors$NCBI.Gene.ID, ]
-rownames(nrExp) <- nReceptors$Approved.symbol
-nrExp <- nrExp %>% rownames_to_column(var = 'Symbol')
-nrExp <- tidyr::pivot_longer(data = nrExp, names_to = "SAMPLE_BARCODE", values_to = "geneExp", cols = starts_with("TCGA"))
-
-# Methylation
-nrMethy <- panCanTurMethy %>% select(any_of(unique(mProbeAtacPeakData$SAMPLE_BARCODE)))
-nrMethy <- nrMethy[unique(mProbeAtacPeakData$Name), ]
-nrMethy <- nrMethy %>% rownames_to_column(var = 'Name')
-nrMethy <- tidyr::pivot_longer(data = nrMethy, names_to = "SAMPLE_BARCODE", values_to = "geneMethy", cols = starts_with("TCGA"))
-
-
-mProbeAtacPeakData <- mProbeAtacPeakData %>% inner_join(nrMethy, by = c('Name', 'SAMPLE_BARCODE'))
-mProbeAtacPeakData <- mProbeAtacPeakData %>% inner_join(nrExp, by = c('Symbol', 'SAMPLE_BARCODE'))
-
-
-methyExpAcat <- mProbeAtacPeakData %>% select(Name, Symbol, DISEASE, id, geneExp, geneMethy, ATAC_Score, Mstatus, Estatus) %>% 
-  distinct() %>% split.data.frame(f = ~ Name + Symbol + DISEASE + id)
-
-methyExpAcat <- methyExpAcat[sapply(methyExpAcat, nrow) > 0]
-
-
-methyExpAcatCor <- lapply(seq(length(methyExpAcat)), function(i){
-
-  print(i)
-  assoData <- methyExpAcat[[i]]
-  
-  if(sum(is.na(assoData$geneExp))/nrow(assoData) > 0.2){
-    res <- data.frame(Name = assoData$Name[1], Symbol = assoData$Symbol[1], DISEASE = assoData$DISEASE[1], id = assoData$id[1], nSams = nrow(assoData), 
-                      Mstatus = assoData$Mstatus[1], Estatus = assoData$Estatus[1], emCor = NA, emPvalue = NA, eaCor = NA, eaPvalue = NA, maCor = NA, maPvalue = NA) 
-    
-  }else{
-    emCor <- cor.test(formula = ~ geneExp + geneMethy, data = assoData, method = "spearman", alternative = 'less')$estimate
-    emPvalue <- cor.test(formula = ~ geneExp + geneMethy, data = assoData, method = "spearman", alternative = 'less')$p.value
-    
-    eaCor <- cor.test(formula = ~ geneExp + ATAC_Score, data = assoData, method = "spearman", alternative = 'greater')$estimate
-    eaPvalue <- cor.test(formula = ~ geneExp + ATAC_Score, data = assoData, method = "spearman", alternative = 'greater')$p.value  
-    
-    maCor <- cor.test(formula = ~ geneMethy + ATAC_Score, data = assoData, method = "spearman", alternative = 'less')$estimate
-    maPvalue <- cor.test(formula = ~ geneMethy + ATAC_Score, data = assoData, method = "spearman", alternative = 'less')$p.value
-    
-    
-    res <- data.frame(Name = assoData$Name[1], Symbol = assoData$Symbol[1], DISEASE = assoData$DISEASE[1], id = assoData$id[1], nSams = nrow(assoData),
-                      Mstatus = assoData$Mstatus[1], Estatus = assoData$Estatus[1], emCor = emCor, emPvalue = emPvalue, eaCor = eaCor, eaPvalue = eaPvalue, maCor = maCor, maPvalue = maPvalue)    
-  }
-  return(res)
-})
-
-
-methyExpAcatCor <- do.call(rbind, methyExpAcatCor)
-
-methyExpAcatCor %>% subset(Mstatus == 'Hyper' & Estatus == 'Down' & emCor < -0.05 & eaCor > 0.05 & maCor < -0.05)
-
+       filename = '/result/section4/mProbeAtacScorePlot.pdf')
 
