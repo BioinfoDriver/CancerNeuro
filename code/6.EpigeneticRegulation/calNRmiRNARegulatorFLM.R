@@ -1,5 +1,5 @@
 
-nROfmiRNAByDis <- readRDS(file = 'D:/CancerNeuroscience/Github/data/nROfmiRNAByDisease.rds')
+nROfmiRNAByDis <- readRDS(file = '/data/nROfmiRNAByDisease.rds')
 
 nROfmiRNAByDis <- sapply(nROfmiRNAByDis, function(nROfmiRNA){
   
@@ -14,19 +14,19 @@ nROfmiRNAByDis <- sapply(nROfmiRNAByDis, function(nROfmiRNA){
 })
 
 
-nReceptors <- readRDS(file = 'D:/CancerNeuroscience/Github/data/neurotransmitterReceptors.rds')
+nReceptors <- readRDS(file = '/data/neurotransmitterReceptors.rds')
 nReceptors <- nReceptors %>% mutate(NCBI.Gene.ID == as.character(NCBI.Gene.ID))
 
 
-load('D:/CancerNeuroscience/Github/data/panCanMiRnaExpData.RData')
+load('/data/panCanMiRnaExpData.RData')
 rownames(panCanTurMiRnaExp) <- gsub(pattern = '-', replacement = '\\.', rownames(panCanTurMiRnaExp))
 
-load('D:/CancerNeuroscience/Github/data/panCanGeneExpData.RData')
+load('/data/panCanGeneExpData.RData')
 panCanTurNrExp <- panCanTurGeneExp[nReceptors$NCBI.Gene.ID, ]
 rownames(panCanTurNrExp) <- nReceptors$Approved.symbol
 
 
-tcgaPanCanSamples <- readRDS(file = 'D:/CancerNeuroscience/Github/data/tcgaPanCanSamples.rds')
+tcgaPanCanSamples <- readRDS(file = '/data/tcgaPanCanSamples.rds')
 tcgaPanCanSamples <- split.data.frame(tcgaPanCanSamples, f = ~DISEASE)
 
 
@@ -70,6 +70,7 @@ nROfmiRNAflm <- do.call(rbind, nROfmiRNAflm)
 colnames(nROfmiRNAflm) <- c('miRNA', 'Estimate', 'StdError', 'tValue', 'pValue', 'Disease', 'nRgene')
 nROfmiRNAflm <- nROfmiRNAflm %>% mutate(miRNA = gsub(pattern = '\\.', replacement = '-', miRNA))
 
-saveRDS(nROfmiRNAflm, file = 'D:/CancerNeuroscience/Github/data/nROfmiRNARegulatorFLM.rds')
+saveRDS(nROfmiRNAflm, file = '/data/nROfmiRNARegulatorFLM.rds')
+
 
 
