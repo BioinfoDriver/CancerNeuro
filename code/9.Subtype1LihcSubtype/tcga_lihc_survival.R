@@ -4,12 +4,12 @@ library('patchwork')
 library('pROC')
 
 # load data
-tcga.cli.data <- readRDS(file = 'D:/CancerNeuroscience/Github/data/tcgaPanCanCliData.rds')
+tcga.cli.data <- readRDS(file = '/data/tcgaPanCanCliData.rds')
 tcga.lihc.cli.data <- subset(tcga.cli.data, cancer_type == 'LIHC')
 rownames(tcga.lihc.cli.data) <- paste0(rownames(tcga.lihc.cli.data), '-01')
 
-load(file = 'D:/CancerNeuroscience/Github/data/panCanGeneExpData.RData')
-tcgaPanCanSamples <- readRDS(file = 'D:/CancerNeuroscience/Github/data/tcgaPanCanSamples.rds')
+load(file = '/data/panCanGeneExpData.RData')
+tcgaPanCanSamples <- readRDS(file = '/data/tcgaPanCanSamples.rds')
 
 # Z-normalization
 panCanTurGeneExp <- as.data.frame(t(panCanTurGeneExp))
@@ -34,7 +34,7 @@ tcga.lihc.exp <- tcgaExpData[, intersect(colnames(tcgaExpData), rownames(tcga.li
 tcga.lihc.cli.data <- tcga.lihc.cli.data[intersect(rownames(tcga.lihc.cli.data), colnames(tcga.lihc.exp)), ]
 
 # risk evaluation
-load(file='D:/CancerNeuroscience/Github/data/lihc_lasso_binomial_res.RData')
+load(file='/data/lihc_lasso_binomial_res.RData')
 
 RiskEsti <- function(exp.dat, gene.set, risk.coef, cut.off=NULL){
   
@@ -59,7 +59,7 @@ colnames(tcga.lihc.cli.data)[1] <- 'patient_id'
 
 
 # best threshold
-hcPearsonWardAverCluster <- readRDS(file = 'D:/CancerNeuroscience/Github/result/section5/unFilter/hcPearsonWardAverCluster.rds')
+hcPearsonWardAverCluster <- readRDS(file = '/result/section5/unFilter/hcPearsonWardAverCluster.rds')
 lihcCluster <- hcPearsonWardAverCluster[[5]]$consensusClass %>% as.data.frame() %>% rownames_to_column(var='patient_id')
 colnames(lihcCluster)[2] <- 'Clusters'
 lihcCluster <- lihcCluster %>% mutate(Clusters = ifelse(Clusters == 1, 'Pos', 'Neg'))
@@ -110,30 +110,30 @@ riskScorePlot <- ggbarplot(data=tcga.lihc.cli.data, x='patient_id', y='risk.scor
   guides(fill=guide_legend(title=NULL)) + geom_vline(xintercept = 112, color = "red", linetype = "dashed")
 
 
-ggsave(filename = 'D:/CancerNeuroscience/Github/result/section5/lihclike/cutoffChioce.pdf', 
+ggsave(filename = '/result/section5/lihclike/cutoffChioce.pdf', 
        plot = bestThresPlot + riskScorePlot, width = 14, height = 7, units = 'cm')
 
 
-saveRDS(tcga.lihc.cli.data, file='D:/CancerNeuroscience/Github/data/lihcRiskScores/tcga_lihc_risk_score.rds')
+saveRDS(tcga.lihc.cli.data, file='/data/lihcRiskScores/tcga_lihc_risk_score.rds')
 
 
 # survival plot 
-source('D:/CancerNeuroscience/Github/code/0.DataPreparation/survival_plot.R')
+source('/code/0.DataPreparation/survival_plot.R')
 SurvivalPlot(survival.data=tcga.lihc.cli.data[, c('patient_id', 'os_time', 'os')], 
              sample.class=tcga.lihc.cli.data[, c('patient_id', 'risk.categ')], filename='tcga_lihc_os.pdf', 
-             out.file.path='D:/CancerNeuroscience/Github/result/section5/lihclike/')
+             out.file.path='/result/section5/lihclike/')
 
 SurvivalPlot(survival.data=tcga.lihc.cli.data[, c('patient_id', 'dss_time', 'dss')], 
              sample.class=tcga.lihc.cli.data[, c('patient_id', 'risk.categ')], filename='tcga_lihc_dss.pdf', 
-             out.file.path='D:/CancerNeuroscience/Github/result/section5/lihclike/')
+             out.file.path='/result/section5/lihclike/')
 
 SurvivalPlot(survival.data=tcga.lihc.cli.data[, c('patient_id', 'pfi_time', 'pfi')], 
              sample.class=tcga.lihc.cli.data[, c('patient_id', 'risk.categ')], filename='tcga_lihc_pfi.pdf', 
-             out.file.path='D:/CancerNeuroscience/Github/result/section5/lihclike/')
+             out.file.path='/result/section5/lihclike/')
 
 SurvivalPlot(survival.data=tcga.lihc.cli.data[, c('patient_id', 'dfi_time', 'dfi')], 
              sample.class=tcga.lihc.cli.data[, c('patient_id', 'risk.categ')], filename='tcga_lihc_dfi.pdf', 
-             out.file.path='D:/CancerNeuroscience/Github/result/section5/lihclike/')
+             out.file.path='/result/section5/lihclike/')
 
 
 ################################uni_mul_cox
@@ -353,8 +353,8 @@ Cox.function <- function(time, event, clinical.data, clinical.variate = NULL){
 }
 
 
-tcga.lihc.cli.char <- readRDS(file='F:/PostdoctoralDataBackup/DesktopCP/E/ExpressionITHProject/GitHub/data/tcga.lihc.cli.char.rds')
-tcga.lihc.risk.score <- readRDS(file='D:/CancerNeuroscience/Github/data/lihcRiskScores/tcga_lihc_risk_score.rds')
+tcga.lihc.cli.char <- readRDS(file='/data/tcga.lihc.cli.char.rds')
+tcga.lihc.risk.score <- readRDS(file='/data/lihcRiskScores/tcga_lihc_risk_score.rds')
 
 
 # data prepare
@@ -385,4 +385,5 @@ uni.mul.cox.res <- Cox.function(time=cli.sig.char$time, event=cli.sig.char$statu
 
 # multiv HR (95% CI for HR)     multiv p value
 # 1.4598 (1.0072-2.1156) 0.0457256767500442
+
 
