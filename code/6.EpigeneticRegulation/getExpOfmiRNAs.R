@@ -2,8 +2,8 @@ library('dplyr')
 library('tibble')
 
 
-load('D:/CancerNeuroscience/Github/data/panCanMiRnaExpData.RData')
-tcgaPanCanSamples <- readRDS(file = 'D:/CancerNeuroscience/Github/data/tcgaPanCanSamples.rds')
+load('/data/panCanMiRnaExpData.RData')
+tcgaPanCanSamples <- readRDS(file = '/data/tcgaPanCanSamples.rds')
 
 tcgaPanCanSamples <- split.data.frame(tcgaPanCanSamples, f = ~DISEASE)
 
@@ -32,6 +32,7 @@ expOfmiRNAsLoose <- sapply(names(tcgaPanCanSamples), function(disease){
 })
 
 
-save(expOfmiRNAsStringent, expOfmiRNAsLoose, file = 'D:/CancerNeuroscience/Github/data/expOfmiRNAs.RData')
+save(expOfmiRNAsStringent, expOfmiRNAsLoose, file = '/data/expOfmiRNAs.RData')
+
 
 
