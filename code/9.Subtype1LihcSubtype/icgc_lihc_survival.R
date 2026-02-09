@@ -45,9 +45,9 @@ source('/code/Rscript/survival_plot.R')
 icgc.linc.cli.data$donor_vital_status <- ifelse(icgc.linc.cli.data$donor_vital_status == 'deceased', 1, 0)
 SurvivalPlot(survival.data=icgc.linc.cli.data[, c('icgc_donor_id', 'donor_survival_time', 'donor_vital_status')], 
              sample.class=icgc.linc.cli.data[, c('icgc_donor_id', 'risk.categ')], filename='icgc_lihc_os.pdf', 
-             out.file.path='D:/CancerNeuroscience/Github/result/section5/lihclike/')
+             out.file.path='/result/section5/lihclike/')
 
-saveRDS(icgc.linc.cli.data, file='D/data/lihcRiskScores/icgc_risk_score.rds')
+saveRDS(icgc.linc.cli.data, file='/data/lihcRiskScores/icgc_risk_score.rds')
 
 ##########Cox
 # load data
@@ -128,4 +128,5 @@ uni.mul.cox.res <- Cox.function(time=cli.sig.char$os_time, event=cli.sig.char$os
 
 # multiv HR (95% CI for HR) multiv p value
 # 1.522 (0.7564-3.0626)         0.2391
+
 
