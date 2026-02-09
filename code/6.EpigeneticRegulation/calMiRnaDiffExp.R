@@ -4,10 +4,10 @@ library('dplyr')
 library('tibble')
 
 ###############
-load(file = 'D:/CancerNeuroscience/Github/data/panCanMiRnaExpData.RData')
-tcgaPanCanSamples <- readRDS(file = 'D:/CancerNeuroscience/Github/data/tcgaPanCanSamples.rds')
+load(file = '/data/panCanMiRnaExpData.RData')
+tcgaPanCanSamples <- readRDS(file = '/data/tcgaPanCanSamples.rds')
 
-load(file = 'D:/CancerNeuroscience/Github/data/expOfmiRNAs.RData')
+load(file = '/data/expOfmiRNAs.RData')
 # expOfmiRNAsStringent, expOfmiRNAsLoose
 
 pairdSams <- substr(colnames(panCanPairdTurMiRnaExp), 1, 12)
@@ -61,6 +61,7 @@ mirDiffExp <- lapply(diseases, function(disease){
 
 mirDiffExp <- do.call(rbind.data.frame, mirDiffExp)
 
-saveRDS(mirDiffExp, file = 'D:/CancerNeuroscience/Github/data/panCanMiRnaDiffExp.rds')
+saveRDS(mirDiffExp, file = '/data/panCanMiRnaDiffExp.rds')
+
 
 
