@@ -3,10 +3,10 @@ library('dplyr')
 library('tibble')
 library('ggplot2')
 ########################
-miRnaDiffExp <- readRDS(file = 'D:/CancerNeuroscience/Github/data/panCanMiRnaDiffExp.rds')
-nRDiffExp <- readRDS(file = 'D:/CancerNeuroscience/Github/data/panCanNrDiffExp.rds')
-miRnaTarByDisease <- readRDS(file = 'D:/CancerNeuroscience/Github/data/nROfmiRNARegulatorFLM.rds')
-panCanSurPvalue <- readRDS(file = 'D:/CancerNeuroscience/Github/data/panCanRhoSurUniMulLogPvalue_PFI.rds')
+miRnaDiffExp <- readRDS(file = '/data/panCanMiRnaDiffExp.rds')
+nRDiffExp <- readRDS(file = '/data/panCanNrDiffExp.rds')
+miRnaTarByDisease <- readRDS(file = '/data/nROfmiRNARegulatorFLM.rds')
+panCanSurPvalue <- readRDS(file = '/data/panCanRhoSurUniMulLogPvalue_PFI.rds')
 
 
 #############
@@ -61,7 +61,7 @@ nRDiffExp <- nRDiffExp %>% left_join(panCanSurPvalue,  by = join_by(DISEASE, Sym
 # 5 DRD1   hsa-miR-106b-5p     2
 
 
-write.table(nRDiffExp, file = 'D:/CancerNeuroscience/Github/result/section4/miRnaNrExprExplain.txt', 
+write.table(nRDiffExp, file = '/result/section4/miRnaNrExprExplain.txt', 
             col.names = T, row.names = F, sep = '\t', quote = FALSE)
 
 ########################
@@ -122,10 +122,9 @@ lgd <- list(Legend(title = "Exp log2Fc", col_fun = gcolFun, at = c(-5.0, -3.0, 0
             Legend(title = "miRNA log2Fc", col_fun = mcolFun, at = c(-1.5, -0.5, 0, 2.0, 4.0), direction = "horizontal"))
 
 
-pdf(file = 'D:/CancerNeuroscience/Github/result/section4/miRNANRExprAssoPlot.pdf', height = 16/2.54, width = 20/2.54)
+pdf(file = '/result/section4/miRNANRExprAssoPlot.pdf', height = 16/2.54, width = 20/2.54)
 
 draw(mirExpAssoPlot, annotation_legend_list = lgd,
      annotation_legend_side = "bottom",heatmap_legend_side = "bottom",merge_legend = TRUE)
 
 dev.off()
-
