@@ -1,10 +1,10 @@
 # load data
-load(file='D:/CancerNeuroscience/Github/data/lihc_lasso_binomial_res.RData')
-icgc.linc.cli.data <- readRDS(file='F:/PostdoctoralDataBackup/DesktopCP/E/ExpressionITHProject/GitHub/data/icgc_linc_cli_data.rds')
-icgc.lihc.vst.exp <- readRDS(file='F:/PostdoctoralDataBackup/DesktopCP/E/ExpressionITHProject/GitHub/data/icgc_vst_norm_geneExp.rds')
+load(file='/data/lihc_lasso_binomial_res.RData')
+icgc.linc.cli.data <- readRDS(file='/data/icgc_linc_cli_data.rds')
+icgc.lihc.vst.exp <- readRDS(file='/data/icgc_vst_norm_geneExp.rds')
 
 
-load('F:/PostdoctoralDataBackup/DesktopCP/E/ExpressionITHProject/GitHub/data/exp_gene_anno.RData')
+load('/data/exp_gene_anno.RData')
 icgc.lihc.vst.exp <- icgc.lihc.vst.exp[as.character(subset(exp.gene.anno, !is.na(ICGCExpGeneFilter))$GeneID), ]
 rownames(icgc.lihc.vst.exp) <- exp.gene.anno$Symbol[match(rownames(icgc.lihc.vst.exp), exp.gene.anno$GeneID)]
 
@@ -41,18 +41,18 @@ icgc.linc.cli.data <- merge(icgc.linc.cli.data, icgc.risk.score, by='row.names')
 
 
 # survival plot 
-source('F:/PostdoctoralDataBackup/DesktopCP/E/ExpressionITHProject/GitHub/code/Rscript/survival_plot.R')
+source('/code/Rscript/survival_plot.R')
 icgc.linc.cli.data$donor_vital_status <- ifelse(icgc.linc.cli.data$donor_vital_status == 'deceased', 1, 0)
 SurvivalPlot(survival.data=icgc.linc.cli.data[, c('icgc_donor_id', 'donor_survival_time', 'donor_vital_status')], 
              sample.class=icgc.linc.cli.data[, c('icgc_donor_id', 'risk.categ')], filename='icgc_lihc_os.pdf', 
              out.file.path='D:/CancerNeuroscience/Github/result/section5/lihclike/')
 
-saveRDS(icgc.linc.cli.data, file='D:/CancerNeuroscience/Github/data/lihcRiskScores/icgc_risk_score.rds')
+saveRDS(icgc.linc.cli.data, file='D/data/lihcRiskScores/icgc_risk_score.rds')
 
 ##########Cox
 # load data
-icgc.lihc.risk.score <- readRDS(file='D:/CancerNeuroscience/Github/data/lihcRiskScores/icgc_risk_score.rds')
-icgc.lihc.cli.data <- readRDS(file='F:/PostdoctoralDataBackup/DesktopCP/E/ExpressionITHProject/GitHub/data/icgc_linc_cli_data.rds')
+icgc.lihc.risk.score <- readRDS(file='/data/lihcRiskScores/icgc_risk_score.rds')
+icgc.lihc.cli.data <- readRDS(file='/data/icgc_linc_cli_data.rds')
 
 # data prepare
 sig.score <- icgc.lihc.risk.score[, c('icgc_donor_id', 'donor_vital_status', 'donor_survival_time', 'risk.score', 'risk.categ')]
@@ -122,13 +122,10 @@ cli.sig.char <- cli.sig.char[, c('icgc_donor_id', 'os', 'os_time', 'risk.categ',
 cli.sig.char <- cli.sig.char[apply(cli.sig.char, 1, function(x) !any(is.na(x))), ]
 
 
-source('F:/PostdoctoralDataBackup/DesktopCP/E/ExpressionITHProject/GitHub/code/Rscript/Cox.function.R')
+source('/code/Rscript/Cox.function.R')
 uni.mul.cox.res <- Cox.function(time=cli.sig.char$os_time, event=cli.sig.char$os, 
                                 clinical.data=cli.sig.char, clinical.variate = c(4:9))
 
 # multiv HR (95% CI for HR) multiv p value
 # 1.522 (0.7564-3.0626)         0.2391
-
-
-
 
