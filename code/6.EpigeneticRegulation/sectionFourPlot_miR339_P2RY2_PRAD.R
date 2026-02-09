@@ -5,16 +5,16 @@ library('ggExtra')
 library('Hmisc')
 library('RColorBrewer')
 ##########
-tcgaPanCanSamples <- readRDS(file = 'D:/CancerNeuroscience/Github/data/tcgaPanCanSamples.rds')
+tcgaPanCanSamples <- readRDS(file = '/data/tcgaPanCanSamples.rds')
 
 
-load(file = 'D:/CancerNeuroscience/Github/data/panCanMiRnaExpData.RData')
+load(file = '/data/panCanMiRnaExpData.RData')
 # panCanTurMiRnaExp, panCanPairdTurMiRnaExp, panCanPairdNormMiRnaExp
 
-load(file = 'D:/CancerNeuroscience/Github/data/panCanGeneExpData.RData')
+load(file = '/data/panCanGeneExpData.RData')
 # geneInfo, panCanTurGeneExp, panCanPairdTurGeneExp, panCanPairdNormGeneExp
 
-nReceptors <- readRDS(file = 'D:/CancerNeuroscience/Github/data/neurotransmitterReceptors.rds')
+nReceptors <- readRDS(file = '/data/neurotransmitterReceptors.rds')
 nReceptors <- nReceptors %>% mutate(NCBI.Gene.ID = as.character(NCBI.Gene.ID))
 
 comSmas <- intersect(colnames(panCanTurMiRnaExp), colnames(panCanTurGeneExp))
@@ -82,5 +82,5 @@ miRNATargetPairedExpPlot <- ggMarginal(p0, type = "boxplot", groupColour = TRUE,
 
 ############
 ggsave(plot = miRNATargetExpPlot + miRNATargetPairedExpPlot, width = 14, height = 7, units = 'cm',
-       filename = 'D:/CancerNeuroscience/Github/result/section4/miR-339_P2RY2_PRAD_ExpPlot.pdf')
+       filename = '/result/section4/miR-339_P2RY2_PRAD_ExpPlot.pdf')
 
