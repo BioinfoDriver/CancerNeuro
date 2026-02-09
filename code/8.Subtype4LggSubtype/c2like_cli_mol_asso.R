@@ -1,7 +1,7 @@
 
 ####################TCGA
 # CDKN2A/B Deletion, EGFR amplification
-gene.cnv.alt <- read.table(file = 'D:/CancerNeuroscience/data/GliomaData/all_thresholded.by_genes.txt', sep = '\t', header = TRUE, stringsAsFactors = FALSE)
+gene.cnv.alt <- read.table(file = '/data/all_thresholded.by_genes.txt', sep = '\t', header = TRUE, stringsAsFactors = FALSE)
 rownames(gene.cnv.alt) <- gene.cnv.alt$Gene.Symbol
 gene.cnv.alt <- gene.cnv.alt[, -c(1:3)]
 colnames(gene.cnv.alt) <- gsub('\\.', '-', substr(colnames(gene.cnv.alt), 1, 15))
@@ -10,10 +10,10 @@ gene.cnv.alt$CDKN2AB <- ifelse((gene.cnv.alt$CDKN2A == -2) | (gene.cnv.alt$CDKN2
 gene.cnv.alt$EGFR <- ifelse(gene.cnv.alt$EGFR == 2, 1, 0)
 
 
-sub.cli.data <- readRDS(file='D:/CancerNeuroscience/Github/data/LggRiskScores/tcga_lgg_risk_score.rds')
+sub.cli.data <- readRDS(file='/data/LggRiskScores/tcga_lgg_risk_score.rds')
 tcga_glioma_cli_mol <- readRDS(file = 'D:/CancerNeuroscience/data/GliomaData/tcga_glioma_cli_mol.rds')
 tcga_glioma_cli_mol <- tcga_glioma_cli_mol %>% mutate(bcr_patient_barcode = paste0(bcr_patient_barcode, '-01'))
-tcgaPanCanSamples <- readRDS(file = 'D:/CancerNeuroscience/Github/data/tcgaPanCanSamples.rds')
+tcgaPanCanSamples <- readRDS(file = '/data/tcgaPanCanSamples.rds')
 
 sub.cli.data <- merge(sub.cli.data, tcgaPanCanSamples[, c('SAMPLE_BARCODE', 'SUBTYPE')], by.x = 'patient_id', by.y = 'SAMPLE_BARCODE')
 sub.cli.data <- merge(sub.cli.data, tcga_glioma_cli_mol[, c('bcr_patient_barcode', 'MGMT_PROMOTER_STATUS')], 
@@ -103,11 +103,11 @@ SUBTYPE.p <- ggbarplot(as.data.frame(table(cli.sig.char[, c('SUBTYPE', 'risk.cat
 
 
 ggsave(ggarrange(age.p, grade.p, histype.p, mgmt.p, CDKN2AB.p, EGFR.p, SUBTYPE.p, ncol=4, nrow=2), width = 20, height = 12, units = 'cm', 
-       file='D:/CancerNeuroscience/Github/result/section5/lgglike/tcga_cli_risk_com.pdf')
+       file='/result/section5/lgglike/tcga_cli_risk_com.pdf')
 
 
 ####################CGGA 693
-sub.cli.data <- readRDS(file='D:/CancerNeuroscience/Github/data/LggRiskScores/plgg_693_risk_score.rds')
+sub.cli.data <- readRDS(file='/data/LggRiskScores/plgg_693_risk_score.rds')
 
 # > mean(sub.cli.data$Age, na.rm = T)
 # [1] 39.97509
@@ -167,12 +167,12 @@ histype.p  <- ggbarplot(as.data.frame(table(cli.sig.char[, c('Histology', 'risk.
                                                                legend.title = element_text(size = 5), legend.text = element_text(size = 5))
 
 ggsave(ggarrange(X1p19q.p, IDH.p, histype.p, ncol=4, nrow=1), width = 20, height = 6, units = 'cm', 
-       file='D:/CancerNeuroscience/Github/result/section5/lgglike/plgg_693_cli_risk_com.pdf')
+       file='/result/section5/lgglike/plgg_693_cli_risk_com.pdf')
 
 
 
 ####################CGGA 325
-sub.cli.data <- readRDS(file='D:/CancerNeuroscience/Github/data/LggRiskScores/plgg_325_risk_score.rds')
+sub.cli.data <- readRDS(file='/data/LggRiskScores/plgg_325_risk_score.rds')
 
 # > mean(sub.cli.data$Age, na.rm = T)
 # [1] 40.66667
@@ -241,12 +241,12 @@ histype.p  <- ggbarplot(as.data.frame(table(cli.sig.char[, c('Histology', 'risk.
                                                                legend.title = element_text(size = 5), legend.text = element_text(size = 5))
 
 ggsave(ggarrange(age.p, grade.p, X1p19q.p, IDH.p, histype.p, ncol=4, nrow=2), width = 20, height = 12, units = 'cm', 
-       file='D:/CancerNeuroscience/Github/result/section5/lgglike/plgg_325_cli_risk_com.pdf')
+       file='/result/section5/lgglike/plgg_325_cli_risk_com.pdf')
 
 
 
 ####################CGGA 301
-sub.cli.data <- readRDS(file='D:/CancerNeuroscience/Github/data/LggRiskScores/plgg_301_risk_score.rds')
+sub.cli.data <- readRDS(file='/data/LggRiskScores/plgg_301_risk_score.rds')
 
 # > mean(sub.cli.data$Age, na.rm = T)
 # [1] 39.7451
@@ -318,13 +318,13 @@ histype.p  <- ggbarplot(as.data.frame(table(cli.sig.char[, c('Histology', 'risk.
                                                                legend.title = element_text(size = 5), legend.text = element_text(size = 5))
 
 ggsave(ggarrange(age.p, subtype.p, grade.p, IDH.p, histype.p, ncol=4, nrow=2), width = 20, height = 12, units = 'cm', 
-       file='D:/CancerNeuroscience/Github/result/section5/lgglike/plgg_301_cli_risk_com.pdf')
+       file='/result/section5/lgglike/plgg_301_cli_risk_com.pdf')
 
 
 
 
 ################################GSE107850
-sub.cli.data <- readRDS(file='D:/CancerNeuroscience/Github/data/LggRiskScores/plgg_GSE107850_risk_score.rds')
+sub.cli.data <- readRDS(file='/data/LggRiskScores/plgg_GSE107850_risk_score.rds')
 # > mean(sub.cli.data$age)
 # [1] 43.94371
 sub.cli.data <- sub.cli.data %>% mutate(age_categ = ifelse(age >= 44, '>= 44', '<44'), gender = factor(gender,levels = c('Female', 'Male')), 
@@ -372,13 +372,13 @@ IDH.p  <- ggbarplot(as.data.frame(table(cli.sig.char[, c('idh.status', 'risk.cat
 
 
 ggsave(ggarrange(histology.p, IDH.p, ncol=4, nrow=1), width = 20, height = 6, units = 'cm', 
-       file='D:/CancerNeuroscience/Github/result/section5/lgglike/plgg_GSE107850_cli_risk_com.pdf')
+       file='/result/section5/lgglike/plgg_GSE107850_cli_risk_com.pdf')
 
 
 
 
 ################################GSE55918
-sub.cli.data <- readRDS(file='D:/CancerNeuroscience/Github/data/LggRiskScores/plgg_GSE55918_risk_score.rds')
+sub.cli.data <- readRDS(file='/data/LggRiskScores/plgg_GSE55918_risk_score.rds')
 # > mean(sub.cli.data$Age)
 # [1] 44.26177
 sub.cli.data <- sub.cli.data %>% mutate(age_categ = ifelse(Age >= 44, '>= 44', '<44'),
@@ -430,7 +430,8 @@ grade.p  <- ggbarplot(as.data.frame(table(cli.sig.char[, c('grade', 'risk.categ'
                                                            legend.title = element_text(size = 5), legend.text = element_text(size = 5))
 
 ggsave(ggarrange(age.p, grade.p, ncol=4, nrow=1), width = 20, height = 6, units = 'cm',  
-       file='D:/CancerNeuroscience/Github/result/section5/lgglike/plgg_GSE55918_cli_risk_com.pdf')
+       file='/result/section5/lgglike/plgg_GSE55918_cli_risk_com.pdf')
+
 
 
 
