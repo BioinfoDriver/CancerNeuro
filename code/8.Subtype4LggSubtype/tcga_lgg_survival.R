@@ -4,18 +4,18 @@ library('patchwork')
 library('pROC')
 
 # load data
-tcga.cli.data <- readRDS(file = 'D:/CancerNeuroscience/Github/data/tcgaPanCanCliData.rds')
+tcga.cli.data <- readRDS(file = '/data/tcgaPanCanCliData.rds')
 tcga.lgg.cli.data <- subset(tcga.cli.data, cancer_type == 'LGG')
 rownames(tcga.lgg.cli.data) <- paste0(rownames(tcga.lgg.cli.data), '-01')
 
-load(file = 'D:/CancerNeuroscience/Github/data/panCanGeneExpData.RData')
+load(file = '/data/panCanGeneExpData.RData')
 tcgaExpData <- panCanTurGeneExp
 
 tcga.lgg.exp <- tcgaExpData[, intersect(colnames(tcgaExpData), rownames(tcga.lgg.cli.data))]
 tcga.lgg.cli.data <- tcga.lgg.cli.data[intersect(rownames(tcga.lgg.cli.data), colnames(tcga.lgg.exp)), ]
 
 # risk evaluation
-load(file='D:/CancerNeuroscience/Github/data/lgg_lasso_binomial_res.RData')
+load(file='/data/lgg_lasso_binomial_res.RData')
 
 RiskEsti <- function(exp.dat, gene.set, risk.coef, cut.off=NULL){
   
@@ -40,7 +40,7 @@ colnames(tcga.lgg.cli.data)[1] <- 'patient_id'
 
 
 # best threshold
-hcPearsonWardAverCluster <- readRDS(file = 'D:/CancerNeuroscience/Github/result/section5/unFilter/hcPearsonWardAverCluster.rds')
+hcPearsonWardAverCluster <- readRDS(file = '/result/section5/unFilter/hcPearsonWardAverCluster.rds')
 lggCluster <- hcPearsonWardAverCluster[[5]]$consensusClass %>% as.data.frame() %>% rownames_to_column(var='patient_id')
 colnames(lggCluster)[2] <- 'Clusters'
 lggCluster <- lggCluster %>% mutate(Clusters = ifelse(Clusters == 4, 'Pos', 'Neg'))
@@ -92,30 +92,30 @@ riskScorePlot <- ggbarplot(data=tcga.lgg.cli.data, x='patient_id', y='risk.score
   guides(fill=guide_legend(title=NULL)) + geom_vline(xintercept = 128, color = "red", linetype = "dashed")
 
 
-ggsave(filename = 'D:/CancerNeuroscience/Github/result/section5/lgglike/cutoffChioce.pdf', 
+ggsave(filename = '/result/section5/lgglike/cutoffChioce.pdf', 
        plot = bestThresPlot + riskScorePlot, width = 14, height = 7, units = 'cm')
 
 
-saveRDS(tcga.lgg.cli.data, file='D:/CancerNeuroscience/Github/data/LggRiskScores/tcga_lgg_risk_score.rds')
+saveRDS(tcga.lgg.cli.data, file='/data/LggRiskScores/tcga_lgg_risk_score.rds')
 
 
 # survival plot 
-source('D:/CancerNeuroscience/Github/code/0.DataPreparation/survival_plot.R')
+source('/code/0.DataPreparation/survival_plot.R')
 SurvivalPlot(survival.data=tcga.lgg.cli.data[, c('patient_id', 'os_time', 'os')], 
              sample.class=tcga.lgg.cli.data[, c('patient_id', 'risk.categ')], filename='tcga_lgg_os.pdf', 
-             out.file.path='D:/CancerNeuroscience/Github/result/section5/lgglike/')
+             out.file.path='/result/section5/lgglike/')
 
 SurvivalPlot(survival.data=tcga.lgg.cli.data[, c('patient_id', 'dss_time', 'dss')], 
              sample.class=tcga.lgg.cli.data[, c('patient_id', 'risk.categ')], filename='tcga_lgg_dss.pdf', 
-             out.file.path='D:/CancerNeuroscience/Github/result/section5/lgglike/')
+             out.file.path='/result/section5/lgglike/')
 
 SurvivalPlot(survival.data=tcga.lgg.cli.data[, c('patient_id', 'pfi_time', 'pfi')], 
              sample.class=tcga.lgg.cli.data[, c('patient_id', 'risk.categ')], filename='tcga_lgg_pfi.pdf', 
-             out.file.path='D:/CancerNeuroscience/Github/result/section5/lgglike/')
+             out.file.path='/result/section5/lgglike/')
 
 SurvivalPlot(survival.data=tcga.lgg.cli.data[, c('patient_id', 'dfi_time', 'dfi')], 
              sample.class=tcga.lgg.cli.data[, c('patient_id', 'risk.categ')], filename='tcga_lgg_dfi.pdf', 
-             out.file.path='D:/CancerNeuroscience/Github/result/section5/lgglike/')
+             out.file.path='/result/section5/lgglike/')
 
 
 ################################uni_mul_cox
@@ -336,7 +336,7 @@ Cox.function <- function(time, event, clinical.data, clinical.variate = NULL){
 
 
 # CDKN2A/B Deletion, EGFR amplification
-gene.cnv.alt <- read.table(file = 'D:/CancerNeuroscience/data/GliomaData/all_thresholded.by_genes.txt', sep = '\t', header = TRUE, stringsAsFactors = FALSE)
+gene.cnv.alt <- read.table(file = '/data/GliomaData/all_thresholded.by_genes.txt', sep = '\t', header = TRUE, stringsAsFactors = FALSE)
 rownames(gene.cnv.alt) <- gene.cnv.alt$Gene.Symbol
 gene.cnv.alt <- gene.cnv.alt[, -c(1:3)]
 colnames(gene.cnv.alt) <- gsub('\\.', '-', substr(colnames(gene.cnv.alt), 1, 15))
@@ -345,10 +345,10 @@ gene.cnv.alt$CDKN2AB <- ifelse((gene.cnv.alt$CDKN2A == -2) | (gene.cnv.alt$CDKN2
 gene.cnv.alt$EGFR <- ifelse(gene.cnv.alt$EGFR == 2, 1, 0)
 
 
-sub.cli.data <- readRDS(file='D:/CancerNeuroscience/Github/data/LggRiskScores/tcga_lgg_risk_score.rds')
-tcga_glioma_cli_mol <- readRDS(file = 'D:/CancerNeuroscience/data/GliomaData/tcga_glioma_cli_mol.rds')
+sub.cli.data <- readRDS(file='/data/LggRiskScores/tcga_lgg_risk_score.rds')
+tcga_glioma_cli_mol <- readRDS(file = '/data/GliomaData/tcga_glioma_cli_mol.rds')
 tcga_glioma_cli_mol <- tcga_glioma_cli_mol %>% mutate(bcr_patient_barcode = paste0(bcr_patient_barcode, '-01'))
-tcgaPanCanSamples <- readRDS(file = 'D:/CancerNeuroscience/Github/data/tcgaPanCanSamples.rds')
+tcgaPanCanSamples <- readRDS(file = '/data/tcgaPanCanSamples.rds')
 
 sub.cli.data <- merge(sub.cli.data, tcgaPanCanSamples[, c('SAMPLE_BARCODE', 'SUBTYPE')], by.x = 'patient_id', by.y = 'SAMPLE_BARCODE')
 sub.cli.data <- merge(sub.cli.data, tcga_glioma_cli_mol[, c('bcr_patient_barcode', 'MGMT_PROMOTER_STATUS')], 
@@ -384,5 +384,6 @@ uni.cox.res <- UnivariateCox(cli.data = cli.sig.char, covariates=colnames(cli.si
 cli.sig.char <- cli.sig.char[apply(cli.sig.char, 1, function(x) !any(is.na(x))), ]
 uni.mul.cox.res <- Cox.function(time=cli.sig.char$time, event=cli.sig.char$status, 
                                 clinical.data=cli.sig.char, clinical.variate = c(4:12))
+
 
 
