@@ -1,7 +1,7 @@
 
 library(dplyr)
 
-miRnaTarByDisease <- readRDS(file = 'D:/CancerNeuroscience/Github/data/nROfmiRNARegulatorFLM.rds')
+miRnaTarByDisease <- readRDS(file = '/data/nROfmiRNARegulatorFLM.rds')
 
 miRnaTarByDisease <- subset(miRnaTarByDisease, pValue < 0.05 & Estimate < -0.15)
 
@@ -14,12 +14,8 @@ targetDegree <- miRnaTarByDisease %>% select(miRNA, nRgene) %>% distinct(miRNA, 
   group_by(nRgene) %>% count(name = 'degree') %>% mutate(nodeType = 2) %>% dplyr::rename(node = nRgene)
 
 nodeAttributes <- rbind.data.frame(miRnaDegree, targetDegree)
-
 networkFilter <- subset(network, width > 2)
 
-
-setwd('D:/CancerNeuroscience/Github/result/section4')
-write.table(network, file = 'miRnaTargerNetworkTargetScan.txt', sep = '\t', col.names = T, row.names = F, quote = F)
-write.table(nodeAttributes, file = 'networkNodeAttributesTargetScan.txt', sep = '\t', col.names = T, row.names = F, quote = F)
-write.table(networkFilter, file = 'miRnaTargerNetworkTargetScanFilter.txt', sep = '\t', col.names = T, row.names = F, quote = F)
-
+write.table(network, file = '/result/section4/miRnaTargerNetworkTargetScan.txt', sep = '\t', col.names = T, row.names = F, quote = F)
+write.table(nodeAttributes, file = '/result/section4/networkNodeAttributesTargetScan.txt', sep = '\t', col.names = T, row.names = F, quote = F)
+write.table(networkFilter, file = '/result/section4/miRnaTargerNetworkTargetScanFilter.txt', sep = '\t', col.names = T, row.names = F, quote = F)
