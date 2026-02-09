@@ -1,6 +1,6 @@
 #####################
-load(file = 'D:/CancerNeuroscience/Github/data/panCanGeneExpData.RData')
-tcgaPanCanSamples <- readRDS(file = 'D:/CancerNeuroscience/Github/data/tcgaPanCanSamples.rds')
+load(file = '/data/panCanGeneExpData.RData')
+tcgaPanCanSamples <- readRDS(file = '/data/tcgaPanCanSamples.rds')
 
 
 # Z-normalization
@@ -24,8 +24,8 @@ panCanTurGeneExp <- do.call(cbind, panCanTurGeneExp)
 tcgaExpData <- panCanTurGeneExp
 
 
-nReceptors <- readRDS(file = 'D:/CancerNeuroscience/Github/data/neurotransmitterReceptors.rds')
-difExpQvalue <- readRDS(file = 'D:/CancerNeuroscience/Github/data/lihcCluster1DiffExpGene.rds')
+nReceptors <- readRDS(file = '/data/neurotransmitterReceptors.rds')
+difExpQvalue <- readRDS(file = '/data/lihcCluster1DiffExpGene.rds')
 difExpQvalue <- difExpQvalue[difExpQvalue < 0.25]
 
 topGenes <- nReceptors %>% subset.data.frame(Approved.symbol %in% names(difExpQvalue)) %>% remove_rownames() %>% 
@@ -36,7 +36,7 @@ rownames(disZscoreExp) <- topGenes$Approved.symbol
 
 
 #####################
-hcPearsonWardAverCluster <- readRDS(file = 'D:/CancerNeuroscience/Github/result/section5/unFilter/hcPearsonWardAverCluster.rds')
+hcPearsonWardAverCluster <- readRDS(file = '/result/section5/unFilter/hcPearsonWardAverCluster.rds')
 lihcCluster <- hcPearsonWardAverCluster[[5]]$consensusClass %>% as.data.frame() %>% rownames_to_column(var='SAMPLE_BARCODE')
 colnames(lihcCluster)[2] <- 'Clusters'
 
@@ -57,7 +57,7 @@ cv.fit = glmnet::cv.glmnet(x = disZscoreExp, y = lihcCluster, type.measure = 'au
 
 
 # plot the cross-validation curve
-pdf('D:/CancerNeuroscience/Github/result/section5/lihclike/cv_curve_auc.pdf')
+pdf('/result/section5/lihclike/cv_curve_auc.pdf')
 plot(cv.fit)
 dev.off()
 
@@ -79,7 +79,7 @@ active.k.vals.1se <- data.frame(symbol = names(active.k.vals.1se), coef = active
 
 
 ########
-geneInfo <- read.csv(file = 'D:/CancerNeuroscience/Github/data/gene_with_protein_product.txt', sep = '\t', header = T, stringsAsFactors = F)
+geneInfo <- read.csv(file = '/data/gene_with_protein_product.txt', sep = '\t', header = T, stringsAsFactors = F)
 
 active.k.vals <- geneInfo %>% select(symbol, entrez_id, ensembl_gene_id) %>% 
   mutate(entrez_id = as.character(entrez_id)) %>% inner_join(active.k.vals, by = join_by(symbol))
@@ -89,5 +89,6 @@ active.k.vals.1se <- geneInfo %>% select(symbol, entrez_id, ensembl_gene_id) %>%
 
 ########
 
-save(cv.fit, active.k.vals, active.k.vals.1se, file='D:/CancerNeuroscience/Github/data/lihc_lasso_binomial_res.RData')
+save(cv.fit, active.k.vals, active.k.vals.1se, file='/data/lihc_lasso_binomial_res.RData')
+
 
