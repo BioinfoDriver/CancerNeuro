@@ -3,8 +3,8 @@ library('msigdbr')
 library("GSVA")
 
 # load data
-tcga.lgg.cli.data <- readRDS(file='D:/CancerNeuroscience/Github/data/LggRiskScores/tcga_lgg_risk_score.rds')
-load(file = 'D:/CancerNeuroscience/Github/data/panCanGeneExpData.RData')
+tcga.lgg.cli.data <- readRDS(file='/data/LggRiskScores/tcga_lgg_risk_score.rds')
+load(file = '/data/panCanGeneExpData.RData')
 tcga.lgg.exp <- panCanTurGeneExp[, intersect(colnames(panCanTurGeneExp), tcga.lgg.cli.data$patient_id)]
 
 
@@ -31,7 +31,7 @@ ssgsea_es <- gsva(ssgseapar)
 
 #####################compare C4-like vs. Others 
 # load data
-tcga.lgg.cli.data <- readRDS(file='D:/CancerNeuroscience/Github/data/LggRiskScores/tcga_lgg_risk_score.rds')
+tcga.lgg.cli.data <- readRDS(file='/data/LggRiskScores/tcga_lgg_risk_score.rds')
 tcga.lgg.cli.data$risk.categ <- factor(tcga.lgg.cli.data$risk.categ, levels = c('Others', 'C4-like'))
 
 ssgsea_es <- readRDS(file = 'D:/CancerNeuroscience/data/tcga_lgg_hallmark_score.rds')
@@ -55,7 +55,7 @@ p.values <- do.call(rbind, p.values) %>% as.data.frame() %>%
   mutate(qvalue = p.adjust(pvalue, method = 'fdr')) %>% arrange(qvalue) %>% mutate(log2FC = log2(Lsocre/Hscore))
 
 # 
-# write.table(p.values, file = 'D:/CancerNeuroscience/Github/result/section5/lgglike/hallmark_score_com_intcga.txt',
+# write.table(p.values, file = '/result/section5/lgglike/hallmark_score_com_intcga.txt',
 #             row.names = T, col.names = T, sep ='\t', quote = F)
 # 
 
@@ -78,5 +78,6 @@ plots <- lapply(hallmarks, function(hallmark){
 
 
 ggsave(cowplot::plot_grid(plotlist = plots, ncol=4, nrow=2), width = 10, height = 8, units = 'cm', 
-       file='D:/CancerNeuroscience/Github/result/section5/lgglike/select_hallmark_score_com.pdf')
+       file='/result/section5/lgglike/select_hallmark_score_com.pdf')
+
 
