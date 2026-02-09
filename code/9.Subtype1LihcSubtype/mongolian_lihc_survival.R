@@ -1,9 +1,9 @@
-load(file='D:/CancerNeuroscience/Github/data/lihc_lasso_binomial_res.RData')
-mongolian.lihc.norm.exp <- readRDS(file='F:/PostdoctoralDataBackup/DesktopCP/E/ExpressionITHProject/GitHub/data/GSE144269_expr_data.rds')
-mongolian.lihc.cli.data <- readRDS(file='F:/PostdoctoralDataBackup/DesktopCP/E/ExpressionITHProject/GitHub/data/GSE144269_cli_data.rds')
+load(file='/data/lihc_lasso_binomial_res.RData')
+mongolian.lihc.norm.exp <- readRDS(file='/data/GSE144269_expr_data.rds')
+mongolian.lihc.cli.data <- readRDS(file='/data/GSE144269_cli_data.rds')
 
 
-load('F:/PostdoctoralDataBackup/DesktopCP/E/ExpressionITHProject/GitHub/data/exp_gene_anno.RData')
+load('/data/exp_gene_anno.RData')
 rownames(mongolian.lihc.norm.exp) <- stringr::str_split_i(rownames(mongolian.lihc.norm.exp), '\\.', i = 1)
 mongolian.lihc.norm.exp <- mongolian.lihc.norm.exp[intersect(rownames(mongolian.lihc.norm.exp), exp.gene.anno$EnsemblID), ]
 rownames(mongolian.lihc.norm.exp) <- exp.gene.anno$Symbol[match(rownames(mongolian.lihc.norm.exp), exp.gene.anno$EnsemblID)]
@@ -34,17 +34,17 @@ mongolian.lihc.cli.data <- cbind(mongolian.lihc.cli.data, risk.score[mongolian.l
 
 
 # survival plot 
-source('F:/PostdoctoralDataBackup/DesktopCP/E/ExpressionITHProject/GitHub/code/Rscript/survival_plot.R')
+source('/code/Rscript/survival_plot.R')
 
 SurvivalPlot(survival.data=mongolian.lihc.cli.data[, c('RNASeq_T', 'survival.time', 'survival.status')], 
              sample.class=mongolian.lihc.cli.data[, c('RNASeq_T', 'risk.categ')], filename='mongolian_lihc_os.pdf', 
-             out.file.path='D:/CancerNeuroscience/Github/result/section5/lihclike/')
+             out.file.path='/result/section5/lihclike/')
 
-saveRDS(mongolian.lihc.cli.data, file='D:/CancerNeuroscience/Github/data/lihcRiskScores/mongolian_risk_score.rds')
+saveRDS(mongolian.lihc.cli.data, file='/data/lihcRiskScores/mongolian_risk_score.rds')
 
 
 ############Cox
-lihc.risk.score <- readRDS(file='D:/CancerNeuroscience/Github/data/lihcRiskScores/mongolian_risk_score.rds')
+lihc.risk.score <- readRDS(file='/data/lihcRiskScores/mongolian_risk_score.rds')
 
 # data prepare
 cli.sig.char <- lihc.risk.score[, c('LHC_ID', 'WES_T', 'age_bin', 'sex', 'smoker', 'alcohol', 'obesity', 
@@ -108,13 +108,14 @@ uni.cox.res <- UnivariateCox(cli.data = cli.sig.char, covariates=colnames(cli.si
 
 # 多因素cox分析
 cli.sig.char <- cli.sig.char[, c('LHC_ID', 'os', 'os_time', 'risk.categ', 'age_bin', 'sex', 
-                                 'stage')] #, "alb", "bil" , 'afp', 'cirrhosis'
+                                 'stage')] 
 cli.sig.char <- cli.sig.char[apply(cli.sig.char, 1, function(x) !any(is.na(x))), ]
 
 
-source('F:/PostdoctoralDataBackup/DesktopCP/E/ExpressionITHProject/GitHub/code/Rscript/Cox.function.R')
+source('/code/Rscript/Cox.function.R')
 uni.mul.cox.res <- Cox.function(time=cli.sig.char$os_time, event=cli.sig.char$os, 
                                 clinical.data=cli.sig.char, clinical.variate = c(4:7)) 
 # multiv HR (95% CI for HR) multiv p value
 # 3.8362 (1.3396-10.9858)         0.0123
+
 
