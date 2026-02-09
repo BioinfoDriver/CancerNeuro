@@ -1,28 +1,22 @@
 library('ggpubr')
 library('ggplot2')
+library('patchwork')
+library('pROC')
 
 # load data
-tcga.cli.data <- readRDS(file = '/data/tcgaPanCanCliData.rds')
+tcga.cli.data <- readRDS(file = 'D:/CancerNeuroscience/Github/data/tcgaPanCanCliData.rds')
 tcga.lgg.cli.data <- subset(tcga.cli.data, cancer_type == 'LGG')
 rownames(tcga.lgg.cli.data) <- paste0(rownames(tcga.lgg.cli.data), '-01')
 
-
-load(file = '/data/panCanGeneExpData.RData')
+load(file = 'D:/CancerNeuroscience/Github/data/panCanGeneExpData.RData')
 tcgaExpData <- panCanTurGeneExp
-
 
 tcga.lgg.exp <- tcgaExpData[, intersect(colnames(tcgaExpData), rownames(tcga.lgg.cli.data))]
 tcga.lgg.cli.data <- tcga.lgg.cli.data[intersect(rownames(tcga.lgg.cli.data), colnames(tcga.lgg.exp)), ]
 
-
-load(file='/data/lgg_lasso_binomial_res.RData')
-
-
-# data prepare
-active.k.vals <- active.k.vals.1se
-
-
 # risk evaluation
+load(file='D:/CancerNeuroscience/Github/data/lgg_lasso_binomial_res.RData')
+
 RiskEsti <- function(exp.dat, gene.set, risk.coef, cut.off=NULL){
   
   # exp.dat <- as.matrix(exp.dat[intersect(rownames(exp.dat), gene.set), ])
@@ -40,61 +34,132 @@ RiskEsti <- function(exp.dat, gene.set, risk.coef, cut.off=NULL){
   return(data.frame(risk.score, risk.categ))
 }
 
-
-tcga.risk.score <- RiskEsti(exp.dat=tcga.lgg.exp, gene.set=active.k.vals$entrez_id, risk.coef=active.k.vals$coef, cut.off='Top')
+tcga.risk.score <- RiskEsti(exp.dat=tcga.lgg.exp, gene.set=active.k.vals.1se$entrez_id, risk.coef=active.k.vals.1se$coef, cut.off='Top')
 tcga.lgg.cli.data <- merge(tcga.lgg.cli.data, tcga.risk.score, by='row.names')
 colnames(tcga.lgg.cli.data)[1] <- 'patient_id'
 
 
+# best threshold
+hcPearsonWardAverCluster <- readRDS(file = 'D:/CancerNeuroscience/Github/result/section5/unFilter/hcPearsonWardAverCluster.rds')
+lggCluster <- hcPearsonWardAverCluster[[5]]$consensusClass %>% as.data.frame() %>% rownames_to_column(var='patient_id')
+colnames(lggCluster)[2] <- 'Clusters'
+lggCluster <- lggCluster %>% mutate(Clusters = ifelse(Clusters == 4, 'Pos', 'Neg'))
 
-panCanCluster <- read.csv(file='/result/section6/consensusCluster_New/New3/panCanClusterNew3.k=5.consensusClass.csv',
-                          header = F, sep = ',', stringsAsFactors = FALSE) %>% dplyr::rename(PATIENT_BARCODE = V1, Clusters = V2)
+tcga.lgg.cli.data <- merge(tcga.lgg.cli.data, lggCluster, by = 'patient_id')
 
-tcga.lgg.cli.data <- merge(tcga.lgg.cli.data, panCanCluster, by.x = 'patient_id', by.y = 'PATIENT_BARCODE')
-tcga.lgg.cli.data <- tcga.lgg.cli.data %>% mutate(Clusters = ifelse(Clusters == 2, 1, 0))
-tcga.lgg.cli.data$Clusters <- factor(tcga.lgg.cli.data$Clusters)
+DetermineOptThresPlot <- function(response, predictor, data, cutMethod = 'Youden'){
+  
+  rocRes <- roc(response=data[, response], predictor=data[, predictor])
+  
+  if(cutMethod == 'Youden'){
+    # Maximization of Youden Index
+    youden <- coords(rocRes, "best", best.method = "youden", ret = c("threshold", "sensitivity", "specificity"))
+    
+  }else{
+    # Closest to the top left corner
+    youden <- coords(rocRes, "best", best.method = "closest.topleft", ret = c("threshold", "sensitivity", "specificity"))
+  }
+  
+  cat("Best threshold:", youden$threshold, '\n')
+  
+  # Draw the ROC curve and mark the optimal threshold
+  ROCcurve <- ggroc(rocRes) + geom_abline(slope = 1, intercept = 1, linetype = "dashed") +
+    geom_point(data = youden, aes(x = specificity, y = sensitivity), color = "red", size = 3) +
+    annotate("text", x = youden$specificity - 0.15, y = youden$sensitivity - 0.05,
+             label = paste("Threshold =", round(youden$threshold, 2))) +
+    labs(x = "Specificity", y = "Sensitivity") + 
+    theme_minimal() + theme(axis.title = element_text(size = 8), axis.text = element_text(size = 7))
+  
+  return(ROCcurve)
+}
+
+# bestThresPlot <- DetermineOptThresPlot(response = 'Clusters', predictor = 'risk.score', data = tcga.lgg.cli.data, cutMethod = 'Youden')
+bestThresPlot <- DetermineOptThresPlot(response = 'Clusters', predictor = 'risk.score', data = tcga.lgg.cli.data, cutMethod = 'closest.toplef')
+
+tcga.lgg.cli.data$risk.categ <- ifelse(tcga.lgg.cli.data$risk.score > -3.29, 'C4-like', 'Others')
+
 
 # > table(tcga.lgg.cli.data$Clusters, tcga.lgg.cli.data$risk.categ)
-# 
-# high risk low risk
-# 0        16      386
-# 1        86       18
-
-p1 <- ggbarplot(data=tcga.lgg.cli.data, x='patient_id', y='risk.score', color=NA, fill='Clusters', sort.by.groups = FALSE, 
-                xlab='Risk score for every patient', ylab='Risk score of the CEB-based classifier', sort.val='desc') + 
-  theme(axis.text.x = element_blank(), axis.ticks.x = element_blank(), axis.line.x = element_blank()) + 
-  guides(fill=guide_legend(title=NULL)) + geom_vline(xintercept = 102, color = "red", linetype = "dashed")
+#     C4-like Others
+# Neg      55    366
+# Pos      73     12
 
 
-ggsave(filename = '/result/section6/lgglike/cutoffChioce.pdf', plot = p1)
+riskScorePlot <- ggbarplot(data=tcga.lgg.cli.data, x='patient_id', y='risk.score', color=NA, fill='Clusters', sort.by.groups = FALSE, 
+                xlab='Risk score for every patient', ylab='C4-like score', sort.val='desc') + 
+  theme(axis.text.x = element_blank(), axis.ticks.x = element_blank(), axis.line.x = element_blank(),
+        axis.title = element_text(size = 8), axis.text = element_text(size = 7)) + 
+  guides(fill=guide_legend(title=NULL)) + geom_vline(xintercept = 128, color = "red", linetype = "dashed")
 
+
+ggsave(filename = 'D:/CancerNeuroscience/Github/result/section5/lgglike/cutoffChioce.pdf', 
+       plot = bestThresPlot + riskScorePlot, width = 14, height = 7, units = 'cm')
+
+
+saveRDS(tcga.lgg.cli.data, file='D:/CancerNeuroscience/Github/data/LggRiskScores/tcga_lgg_risk_score.rds')
 
 
 # survival plot 
-source('/code/survival_plot.R')
+source('D:/CancerNeuroscience/Github/code/0.DataPreparation/survival_plot.R')
 SurvivalPlot(survival.data=tcga.lgg.cli.data[, c('patient_id', 'os_time', 'os')], 
              sample.class=tcga.lgg.cli.data[, c('patient_id', 'risk.categ')], filename='tcga_lgg_os.pdf', 
-             out.file.path='/result/section6/lgglike/')
+             out.file.path='D:/CancerNeuroscience/Github/result/section5/lgglike/')
 
 SurvivalPlot(survival.data=tcga.lgg.cli.data[, c('patient_id', 'dss_time', 'dss')], 
              sample.class=tcga.lgg.cli.data[, c('patient_id', 'risk.categ')], filename='tcga_lgg_dss.pdf', 
-             out.file.path='/result/section6/lgglike/')
+             out.file.path='D:/CancerNeuroscience/Github/result/section5/lgglike/')
 
 SurvivalPlot(survival.data=tcga.lgg.cli.data[, c('patient_id', 'pfi_time', 'pfi')], 
              sample.class=tcga.lgg.cli.data[, c('patient_id', 'risk.categ')], filename='tcga_lgg_pfi.pdf', 
-             out.file.path='/result/section6/lgglike/')
+             out.file.path='D:/CancerNeuroscience/Github/result/section5/lgglike/')
 
 SurvivalPlot(survival.data=tcga.lgg.cli.data[, c('patient_id', 'dfi_time', 'dfi')], 
              sample.class=tcga.lgg.cli.data[, c('patient_id', 'risk.categ')], filename='tcga_lgg_dfi.pdf', 
-             out.file.path='/result/section6/lgglike/')
-
-
-saveRDS(tcga.lgg.cli.data, file='/data/LggRiskScores/tcga_lgg_risk_score.rds')
-
-
+             out.file.path='D:/CancerNeuroscience/Github/result/section5/lgglike/')
 
 
 ################################uni_mul_cox
+UnivariateCox <- function(cli.data, covariates){
+  library('survival')
+  #STEP1:构建单因素分析的对象
+  univ_formulas <- sapply(covariates,
+                          function(x) as.formula(paste('Surv(time, status)~', x)));
+  
+  #STEP2:单因素Cox分析
+  univ_models <- lapply(univ_formulas, function(x){coxph(x, data = cli.data)});
+  
+  #STEP3:提取有用信息
+  univ_results <- lapply(univ_models, function(x)
+  {                             
+    tmp <-summary(x);
+    
+    #提取p值，保留两位有效数字
+    # p.value <- round(tmp$coefficients[ ,5], digits = 4);
+    # p.value[which(p.value < 0.0001)] <- "<0.0001";
+    p.value <- tmp$coefficients[ ,5]
+    
+    #提取beta值，这里的coefficients为矩阵，但是只有一行，所以可以这样取值
+    #beta <- round(tmp$coefficients[ ,1], digits = 4);
+    
+    #提取风险比
+    HR <- round(tmp$coefficients[ ,2], digits = 4);
+    
+    #提取95%置信区间上下界
+    HR.confint.lower <- round(tmp$conf.int[,"lower .95"], 4);
+    HR.confint.upper <- round(tmp$conf.int[,"upper .95"], 4);    
+    
+    #合并风险比HR和置信区间为一个内容
+    HR <- paste0(HR, " (", HR.confint.lower, "-", HR.confint.upper, ")");
+    
+    variate <- rownames(tmp$coefficients);
+    
+    #将所有值合并在一个矩阵中
+    all.data <- as.data.frame(cbind(variate, HR, p.value));
+  }
+  )
+  univ_results <- do.call(rbind, univ_results)
+  return(univ_results)
+}
 Cox.function <- function(time, event, clinical.data, clinical.variate = NULL){
   ###设置工作环境
   options(stringsAsFactors = FALSE, warn = -1);
@@ -271,7 +336,7 @@ Cox.function <- function(time, event, clinical.data, clinical.variate = NULL){
 
 
 # CDKN2A/B Deletion, EGFR amplification
-gene.cnv.alt <- read.table(file = '/data/GliomaData/all_thresholded.by_genes.txt', sep = '\t', header = TRUE, stringsAsFactors = FALSE)
+gene.cnv.alt <- read.table(file = 'D:/CancerNeuroscience/data/GliomaData/all_thresholded.by_genes.txt', sep = '\t', header = TRUE, stringsAsFactors = FALSE)
 rownames(gene.cnv.alt) <- gene.cnv.alt$Gene.Symbol
 gene.cnv.alt <- gene.cnv.alt[, -c(1:3)]
 colnames(gene.cnv.alt) <- gsub('\\.', '-', substr(colnames(gene.cnv.alt), 1, 15))
@@ -280,11 +345,10 @@ gene.cnv.alt$CDKN2AB <- ifelse((gene.cnv.alt$CDKN2A == -2) | (gene.cnv.alt$CDKN2
 gene.cnv.alt$EGFR <- ifelse(gene.cnv.alt$EGFR == 2, 1, 0)
 
 
-
-sub.cli.data <- readRDS(file='/data/LggRiskScores/tcga_lgg_risk_score.rds')
-tcga_glioma_cli_mol <- readRDS(file = '/data/GliomaData/tcga_glioma_cli_mol.rds')
+sub.cli.data <- readRDS(file='D:/CancerNeuroscience/Github/data/LggRiskScores/tcga_lgg_risk_score.rds')
+tcga_glioma_cli_mol <- readRDS(file = 'D:/CancerNeuroscience/data/GliomaData/tcga_glioma_cli_mol.rds')
 tcga_glioma_cli_mol <- tcga_glioma_cli_mol %>% mutate(bcr_patient_barcode = paste0(bcr_patient_barcode, '-01'))
-tcgaPanCanSamples <- readRDS(file = '/data/tcgaPanCanSamples.rds')
+tcgaPanCanSamples <- readRDS(file = 'D:/CancerNeuroscience/Github/data/tcgaPanCanSamples.rds')
 
 sub.cli.data <- merge(sub.cli.data, tcgaPanCanSamples[, c('SAMPLE_BARCODE', 'SUBTYPE')], by.x = 'patient_id', by.y = 'SAMPLE_BARCODE')
 sub.cli.data <- merge(sub.cli.data, tcga_glioma_cli_mol[, c('bcr_patient_barcode', 'MGMT_PROMOTER_STATUS')], 
@@ -293,11 +357,10 @@ sub.cli.data <- merge(sub.cli.data, tcga_glioma_cli_mol[, c('bcr_patient_barcode
 sub.cli.data$CDKN2AB <- gene.cnv.alt[sub.cli.data$patient_id, 'CDKN2AB']
 sub.cli.data$EGFR <- gene.cnv.alt[sub.cli.data$patient_id, 'EGFR']
 
-
-
 # > mean(sub.cli.data$age)
 # [1] 42.99012
-sub.cli.data <- sub.cli.data %>% mutate(age_categ = ifelse(age >= 43, '>= 43', '<43'), gender = factor(gender,levels = c('FEMALE', 'MALE')), 
+sub.cli.data <- sub.cli.data %>% mutate(age_categ = ifelse(age >= 43, '>= 43', '<43'), 
+                                        gender = factor(gender,levels = c('FEMALE', 'MALE')), 
                                         # race = factor(race, levels = c('BLACK', 'OTHER', 'WHITE')),
                                         histological_type = factor(histological_type, levels = c('Oligodendroglioma', 'Oligoastrocytoma', 'Astrocytoma')), 
                                         histological_grade = factor(histological_grade, levels = c('G2', 'G3')),
@@ -305,163 +368,21 @@ sub.cli.data <- sub.cli.data %>% mutate(age_categ = ifelse(age >= 43, '>= 43', '
                                         CDKN2AB = factor(CDKN2AB, levels = c(0, 1)), 
                                         EGFR = factor(EGFR, levels = c(0, 1)), 
                                         SUBTYPE = factor(SUBTYPE, levels = c('IDHmut-codel', 'IDHmut-non-codel', 'IDHwt')), 
-                                        risk.categ = factor(risk.categ , levels = c('low risk', 'high risk')))
+                                        risk.categ = factor(risk.categ , levels = c('Others', 'C4-like')),
+                                        Clusters = factor(Clusters, levels = c('Neg', 'Pos')))
 
 cli.sig.char <- sub.cli.data %>% select(patient_id, os_time, os, age_categ, gender, histological_type, histological_grade, mgmt.status, CDKN2AB, EGFR, SUBTYPE, risk.categ) # race,
-cli.sig.char <- subset(cli.sig.char, !is.na(os_time) & !is.na(os))
+cli.sig.char <- cli.sig.char %>% rename(time = os_time, status = os)
+# cli.sig.char <- sub.cli.data %>% select(patient_id, pfi_time, pfi, age_categ, gender, histological_type, histological_grade, mgmt.status, CDKN2AB, EGFR, SUBTYPE, risk.categ) # race,
+# cli.sig.char <- cli.sig.char %>% rename(time = pfi_time, status = pfi)
 
- 
-UnivariateCox <- function(cli.data, covariates)
-{
-  library('survival')
-  #STEP1:构建单因素分析的对象
-  univ_formulas <- sapply(covariates,
-                          function(x) as.formula(paste('Surv(os_time, os)~', x)));
-  
-  #STEP2:单因素Cox分析
-  univ_models <- lapply(univ_formulas, function(x){coxph(x, data = cli.data)});
-  
-  #STEP3:提取有用信息
-  univ_results <- lapply(univ_models, function(x)
-  {                             
-    tmp <-summary(x);
-    
-    #提取p值，保留两位有效数字
-    # p.value <- round(tmp$coefficients[ ,5], digits = 4);
-    # p.value[which(p.value < 0.0001)] <- "<0.0001";
-    p.value <- tmp$coefficients[ ,5]
-    
-    #提取beta值，这里的coefficients为矩阵，但是只有一行，所以可以这样取值
-    #beta <- round(tmp$coefficients[ ,1], digits = 4);
-    
-    #提取风险比
-    HR <- round(tmp$coefficients[ ,2], digits = 4);
-    
-    #提取95%置信区间上下界
-    HR.confint.lower <- round(tmp$conf.int[,"lower .95"], 4);
-    HR.confint.upper <- round(tmp$conf.int[,"upper .95"], 4);    
-    
-    #合并风险比HR和置信区间为一个内容
-    HR <- paste0(HR, " (", HR.confint.lower, "-", HR.confint.upper, ")");
-    
-    variate <- rownames(tmp$coefficients);
-    
-    #将所有值合并在一个矩阵中
-    all.data <- as.data.frame(cbind(variate, HR, p.value));
-  }
-  )
-  univ_results <- do.call(rbind, univ_results)
-  return(univ_results)
-}
-
+cli.sig.char <- subset(cli.sig.char, !is.na(time) & !is.na(status))
 uni.cox.res <- UnivariateCox(cli.data = cli.sig.char, covariates=colnames(cli.sig.char)[4:12])
-
-
 
 
 # 多因素cox分析
 cli.sig.char <- cli.sig.char[apply(cli.sig.char, 1, function(x) !any(is.na(x))), ]
-uni.mul.cox.res <- Cox.function(time=cli.sig.char$os_time, event=cli.sig.char$os, 
-                                clinical.data=cli.sig.char, clinical.variate = c(4:12))
-
-
-
-################################uni_mul_cox
-
-# CDKN2A/B Deletion, EGFR amplification
-gene.cnv.alt <- read.table(file = '/data/GliomaData/all_thresholded.by_genes.txt', sep = '\t', header = TRUE, stringsAsFactors = FALSE)
-rownames(gene.cnv.alt) <- gene.cnv.alt$Gene.Symbol
-gene.cnv.alt <- gene.cnv.alt[, -c(1:3)]
-colnames(gene.cnv.alt) <- gsub('\\.', '-', substr(colnames(gene.cnv.alt), 1, 15))
-gene.cnv.alt <- as.data.frame(t(gene.cnv.alt))
-gene.cnv.alt$CDKN2AB <- ifelse((gene.cnv.alt$CDKN2A == -2) | (gene.cnv.alt$CDKN2B == -2), 1, 0)
-gene.cnv.alt$EGFR <- ifelse(gene.cnv.alt$EGFR == 2, 1, 0)
-
-
-
-sub.cli.data <- readRDS(file='/data/LggRiskScores/tcga_lgg_risk_score.rds')
-tcga_glioma_cli_mol <- readRDS(file = '/data/GliomaData/tcga_glioma_cli_mol.rds')
-tcga_glioma_cli_mol <- tcga_glioma_cli_mol %>% mutate(bcr_patient_barcode = paste0(bcr_patient_barcode, '-01'))
-tcgaPanCanSamples <- readRDS(file = '/data/tcgaPanCanSamples.rds')
-
-sub.cli.data <- merge(sub.cli.data, tcgaPanCanSamples[, c('SAMPLE_BARCODE', 'SUBTYPE')], by.x = 'patient_id', by.y = 'SAMPLE_BARCODE')
-sub.cli.data <- merge(sub.cli.data, tcga_glioma_cli_mol[, c('bcr_patient_barcode', 'MGMT_PROMOTER_STATUS')], 
-                      by.x = 'patient_id', by.y = 'bcr_patient_barcode')
-
-
-sub.cli.data$CDKN2AB <- gene.cnv.alt[sub.cli.data$patient_id, 'CDKN2AB']
-sub.cli.data$EGFR <- gene.cnv.alt[sub.cli.data$patient_id, 'EGFR']
-
-
-# > mean(sub.cli.data$age)
-# [1] 42.99012
-sub.cli.data <- sub.cli.data %>% mutate(age_categ = ifelse(age >= 43, '>= 43', '<43'), gender = factor(gender,levels = c('FEMALE', 'MALE')), 
-                                        # race = factor(race, levels = c('BLACK', 'OTHER', 'WHITE')),
-                                        histological_type = factor(histological_type, levels = c('Oligodendroglioma', 'Oligoastrocytoma', 'Astrocytoma')), 
-                                        histological_grade = factor(histological_grade, levels = c('G2', 'G3')),
-                                        mgmt.status = factor(MGMT_PROMOTER_STATUS, levels = c('Unmethylated', 'Methylated')), 
-                                        CDKN2AB = factor(CDKN2AB, levels = c(0, 1)), 
-                                        EGFR = factor(EGFR, levels = c(0, 1)), 
-                                        SUBTYPE = factor(SUBTYPE, levels = c('IDHmut-codel', 'IDHmut-non-codel', 'IDHwt')), 
-                                        Clusters = factor(Clusters, levels = c(0, 1)))
-
-
-cli.sig.char <- sub.cli.data %>% select(patient_id, os_time, os, age_categ, gender, histological_type, histological_grade, mgmt.status, CDKN2AB, EGFR, SUBTYPE, Clusters) # race,
-cli.sig.char <- subset(cli.sig.char, !is.na(os_time) & !is.na(os))
-
-
-UnivariateCox <- function(cli.data, covariates)
-{
-  library('survival')
-  #STEP1:构建单因素分析的对象
-  univ_formulas <- sapply(covariates,
-                          function(x) as.formula(paste('Surv(os_time, os)~', x)));
-  
-  #STEP2:单因素Cox分析
-  univ_models <- lapply(univ_formulas, function(x){coxph(x, data = cli.data)});
-  
-  #STEP3:提取有用信息
-  univ_results <- lapply(univ_models, function(x)
-  {                             
-    tmp <-summary(x);
-    
-    #提取p值，保留两位有效数字
-    # p.value <- round(tmp$coefficients[ ,5], digits = 4);
-    # p.value[which(p.value < 0.0001)] <- "<0.0001";
-    p.value <- tmp$coefficients[ ,5]
-    
-    
-    #提取beta值，这里的coefficients为矩阵，但是只有一行，所以可以这样取值
-    #beta <- round(tmp$coefficients[ ,1], digits = 4);
-    
-    #提取风险比
-    HR <- round(tmp$coefficients[ ,2], digits = 4);
-    
-    #提取95%置信区间上下界
-    HR.confint.lower <- round(tmp$conf.int[,"lower .95"], 4);
-    HR.confint.upper <- round(tmp$conf.int[,"upper .95"], 4);    
-    
-    #合并风险比HR和置信区间为一个内容
-    HR <- paste0(HR, " (", HR.confint.lower, "-", HR.confint.upper, ")");
-    
-    variate <- rownames(tmp$coefficients);
-    
-    #将所有值合并在一个矩阵中
-    all.data <- as.data.frame(cbind(variate, HR, p.value));
-  }
-  )
-  univ_results <- do.call(rbind, univ_results)
-  return(univ_results)
-}
-
-uni.cox.res <- UnivariateCox(cli.data = cli.sig.char, covariates=colnames(cli.sig.char)[4:12])
-
-
-
-
-# 多因素cox分析
-cli.sig.char <- cli.sig.char[apply(cli.sig.char, 1, function(x) !any(is.na(x))), ]
-uni.mul.cox.res <- Cox.function(time=cli.sig.char$os_time, event=cli.sig.char$os, 
+uni.mul.cox.res <- Cox.function(time=cli.sig.char$time, event=cli.sig.char$status, 
                                 clinical.data=cli.sig.char, clinical.variate = c(4:12))
 
 
