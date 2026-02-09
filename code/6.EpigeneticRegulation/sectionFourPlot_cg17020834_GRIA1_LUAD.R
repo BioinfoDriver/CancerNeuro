@@ -6,17 +6,17 @@ library('ggExtra')
 library('Hmisc')
 library('RColorBrewer')
 ##########
-tcgaPanCanSamples <- readRDS(file = 'D:/CancerNeuroscience/Github/data/tcgaPanCanSamples.rds')
+tcgaPanCanSamples <- readRDS(file = '/data/tcgaPanCanSamples.rds')
 
-load(file = 'D:/CancerNeuroscience/Github/data/panCanGeneExpData.RData')
+load(file = '/data/panCanGeneExpData.RData')
 # geneInfo, panCanTurGeneExp, panCanPairdTurGeneExp, panCanPairdNormGeneExp
 
-load(file = 'D:/CancerNeuroscience/Github/data/panCanMethyData.RData')
+load(file = '/data/panCanMethyData.RData')
 # panCanTurMethy, panCanPairdTurMethy, panCanPairdNormMethy
 
 
 ##############
-anno450k <- readRDS(file = 'D:/CancerNeuroscience/Github/data/methAnno450k.rds')
+anno450k <- readRDS(file = '/data/methAnno450k.rds')
 nrAnno450k <- subset(anno450k, RefGene_Name %in% 'GRIA1')
 
 nrpromoterAnno <- subset(nrAnno450k, Name %in% c('cg17020834'))
@@ -96,5 +96,6 @@ methyExpPairedPlot <- ggMarginal(p0, type = "boxplot", groupColour = TRUE, group
 
 ############
 ggsave(plot = methyExpPlot + methyExpPairedPlot, width = 14, height = 7, units = 'cm',
-       filename = 'D:/CancerNeuroscience/Github/result/section4/cg17020834_GRIA1_LUAD_ExpPlot.pdf')
+       filename = '/result/section4/cg17020834_GRIA1_LUAD_ExpPlot.pdf')
+
 
